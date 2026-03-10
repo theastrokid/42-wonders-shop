@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>42 Wonders of Our Night Sky | by Damon Scotting</title>
+    <meta name="description" content="A guided celebration of the cosmos. Explore 42 extraordinary wonders of the night sky — rated, illustrated, and brought to life.">
+    <meta property="og:title" content="42 Wonders of Our Night Sky">
+    <meta property="og:description" content="A guided celebration of the cosmos from your own backyard.">
+    <meta property="og:type" content="product">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Cinzel:wght@400..900&display=swap" rel="stylesheet">
+
+    <style>
+/* === RESET & VARIABLES === */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --bg: #0a0e1a;
+    --bg-deep: #060a14;
+    --bg-card: #0f1424;
+    --navy: #0d1329;
+    --midnight: #141b33;
+    --gold: #c9a84c;
+    --gold-light: #e8d48b;
+    --gold-bright: #ffd700;
+    --gold-dim: #8a7632;
+    --cream: #f5f0e8;
+    --text: #d4d0c8;
+    --text-dim: #8a8578;
+    --text-bright: #eae6de;
+    --accent-blue: #1e3a5f;
+    --accent-purple: #2a1a4e;
+    --beauty-color: #e8a849;
+    --power-color: #d4553a;
+    --mystery-color: #7b5ea7;
+    --wonder-color: #dbb54c;
+    --radius: 12px;
+    --radius-lg: 20px;
+    --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+
+/* === TYPOGRAPHY === */
+h1, h2, h3 { font-family: 'Playfair Display', serif; line-height: 1.15; color: var(--cream); }
+h1 { font-size: clamp(2.4rem, 5.5vw, 4.8rem); font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.8rem, 4vw, 3.2rem); font-weight: 600; }
+h3 { font-size: clamp(1.15rem, 1.8vw, 1.5rem); font-weight: 600; }
+
+.eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+}
+
+/* === LAYOUT === */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 120px 0; position: relative; z-index: 2; }
+@media (max-width: 768px) { .section { padding: 80px 0; } }
+.section-header { text-align: center; max-width: 680px; margin: 0 auto 72px; }
+.section-header p { font-size: 1.05rem; color: var(--text); margin-top: 16px; line-height: 1.8; }
+
+/* === STARFIELD === */
+#starfield { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+/* === CURSOR GLOW === */
+.cursor-glow {
+    position: fixed; width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.04) 0%, transparent 70%);
+    transform: translate(-50%, -50%); pointer-events: none; z-index: 1;
+    will-change: left, top;
+}
+@media (max-width: 768px) { .cursor-glow { display: none; } }
+
+/* === NAVIGATION === */
+.nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 16px 32px; display: flex; align-items: center; justify-content: space-between;
+    background: rgba(10,14,26,0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+    transform: translateY(-100%); transition: transform 0.5s var(--ease);
+}
+.nav.visible { transform: translateY(0); }
+.nav-title {
+    font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 600;
+    color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase;
+}
+.nav-cta {
+    font-size: 0.8rem; font-weight: 600; padding: 10px 28px;
+    background: var(--gold); color: var(--bg-deep); border-radius: 100px;
+    letter-spacing: 0.04em; transition: 0.3s var(--ease);
+}
+.nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+/* === BUTTONS === */
+.btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 16px 40px; border-radius: 100px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600;
+    letter-spacing: 0.03em; transition: 0.4s var(--ease); cursor: pointer;
+}
+.btn-gold {
+    background: linear-gradient(135deg, var(--gold) 0%, #d4b85c 100%);
+    color: var(--bg-deep); box-shadow: 0 4px 24px rgba(201,168,76,0.25);
+}
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(201,168,76,0.35); background: linear-gradient(135deg, var(--gold-light), var(--gold)); }
+.btn-outline { background: transparent; color: var(--gold); border: 1.5px solid rgba(201,168,76,0.4); }
+.btn-outline:hover { border-color: var(--gold); background: rgba(201,168,76,0.08); transform: translateY(-2px); }
+.btn-large { padding: 20px 56px; font-size: 1.05rem; }
+
+/* === GOLD DIVIDER === */
+.gold-divider { display: flex; align-items: center; justify-content: center; gap: 20px; padding: 20px 0; max-width: 280px; margin: 0 auto; position: relative; z-index: 2; }
+.gold-divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dim), transparent); }
+.gold-divider-diamond { width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg); opacity: 0.7; flex-shrink: 0; }
+
+/* === SCROLL REVEAL === */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
+.reveal.revealed { opacity: 1; transform: translateY(0); }
+.reveal-left { opacity: 0; transform: translateX(-50px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal-right { opacity: 0; transform: translateX(50px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal-left.revealed, .reveal-right.revealed { opacity: 1; transform: translateX(0); }
+.stagger .reveal:nth-child(2) { transition-delay: 0.1s; }
+.stagger .reveal:nth-child(3) { transition-delay: 0.2s; }
+.stagger .reveal:nth-child(4) { transition-delay: 0.3s; }
+.stagger .reveal:nth-child(5) { transition-delay: 0.4s; }
+.stagger .reveal:nth-child(6) { transition-delay: 0.5s; }
+.stagger .reveal:nth-child(7) { transition-delay: 0.6s; }
+.stagger .reveal:nth-child(8) { transition-delay: 0.7s; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; z-index: 2; }
+.hero-bg { position: absolute; inset: 0; z-index: 0; }
+.hero-bg video { width: 100%; height: 100%; object-fit: cover; opacity: 0.18; }
+.hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(201,168,76,0.06) 0%, transparent 60%),
+                linear-gradient(180deg, rgba(6,10,20,0.2) 0%, var(--bg) 100%);
+}
+.hero-content {
+    position: relative; z-index: 2; display: flex; align-items: center;
+    gap: 80px; max-width: 1200px; padding: 120px 32px 80px; width: 100%;
+}
+.hero-book-wrap { position: relative; flex-shrink: 0; perspective: 1200px; }
+.hero-book {
+    width: 340px; border-radius: 8px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(201,168,76,0.1);
+    transition: transform 0.4s var(--ease); transform-style: preserve-3d; will-change: transform;
+}
+.hero-book-glow {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 140%; height: 140%;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.2) 0%, transparent 65%);
+    filter: blur(50px); z-index: -1; animation: glowPulse 5s ease-in-out infinite;
+}
+.hero-book-shine {
+    position: absolute; inset: 0; border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.3s;
+    background: linear-gradient(105deg, transparent 35%, rgba(255,219,112,0.08) 42%, rgba(255,219,112,0.15) 50%, rgba(255,219,112,0.08) 58%, transparent 65%);
+}
+.hero-book-wrap:hover .hero-book-shine { opacity: 1; }
+.hero-text { flex: 1; max-width: 560px; }
+.hero-text h1 { margin-bottom: 20px; }
+.hero-text .gold { color: var(--gold); }
+.hero-author {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.2rem;
+    color: var(--gold-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 24px;
+}
+.hero-subtitle {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(1.15rem, 2vw, 1.4rem);
+    font-weight: 400; color: var(--text-bright); line-height: 1.6; margin-bottom: 16px; font-style: italic;
+}
+.hero-desc { font-size: 1rem; color: var(--text); margin-bottom: 40px; line-height: 1.8; max-width: 480px; }
+.hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+.scroll-indicator {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    z-index: 3; opacity: 0.5; animation: floatY 3s ease-in-out infinite;
+}
+.scroll-indicator span { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-dim); }
+.scroll-arrow { width: 20px; height: 20px; border-right: 1.5px solid var(--gold-dim); border-bottom: 1.5px solid var(--gold-dim); transform: rotate(45deg); }
+
+@media (max-width: 960px) {
+    .hero-content { flex-direction: column; text-align: center; gap: 48px; padding-top: 140px; }
+    .hero-book { width: 260px; }
+    .hero-text { max-width: 100%; }
+    .hero-ctas { justify-content: center; }
+    .hero-desc { margin-left: auto; margin-right: auto; }
+}
+@media (max-width: 480px) {
+    .hero-book { width: 200px; }
+    .hero-ctas { flex-direction: column; align-items: stretch; }
+}
+
+/* ============================================================
+   WHAT MAKES IT SPECIAL
+   ============================================================ */
+.section-special { background: linear-gradient(180deg, var(--bg) 0%, #0c1122 50%, var(--bg) 100%); }
+.special-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.special-book-vis { position: relative; }
+.special-book-vis img { width: 100%; border-radius: var(--radius); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+.special-badge {
+    position: absolute; top: -16px; right: -16px; width: 90px; height: 90px;
+    background: linear-gradient(135deg, var(--gold), #d4b85c); border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: var(--bg-deep); box-shadow: 0 8px 30px rgba(201,168,76,0.3);
+}
+.special-badge .b-num { font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 700; line-height: 1; }
+.special-badge .b-lbl { font-size: 0.55rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.2; }
+.feature-cards { display: flex; flex-direction: column; gap: 20px; }
+.feature-card {
+    background: rgba(15,20,36,0.8); border: 1px solid rgba(201,168,76,0.08);
+    border-radius: var(--radius); padding: 28px 32px; transition: 0.4s var(--ease);
+    position: relative; overflow: hidden;
+}
+.feature-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--gold); opacity: 0; transition: 0.4s var(--ease); }
+.feature-card:hover { border-color: rgba(201,168,76,0.15); background: rgba(20,27,51,0.9); transform: translateX(8px); }
+.feature-card:hover::before { opacity: 1; }
+.feature-card .fc-icon { font-size: 1.5rem; margin-bottom: 8px; display: block; color: var(--gold); }
+.feature-card h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--gold-light); }
+.feature-card p { font-size: 0.92rem; color: var(--text-dim); line-height: 1.6; }
+@media (max-width: 860px) { .special-layout { grid-template-columns: 1fr; gap: 48px; } .special-book-vis { max-width: 400px; margin: 0 auto; } }
+
+/* ============================================================
+   INSIDE THE BOOK
+   ============================================================ */
+.section-inside { background: var(--bg-deep); }
+.inside-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.gallery-card { position: relative; border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 3/4; cursor: default; }
+.gallery-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+.gallery-card:hover img { transform: scale(1.06); }
+.gallery-overlay {
+    position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 28px;
+    background: linear-gradient(0deg, rgba(6,10,20,0.9) 0%, transparent 60%); transition: 0.4s var(--ease);
+}
+.gallery-card:hover .gallery-overlay { background: linear-gradient(0deg, rgba(6,10,20,0.95) 0%, rgba(6,10,20,0.2) 60%); }
+.gallery-overlay h3 { font-size: 1.1rem; margin-bottom: 6px; }
+.gallery-overlay p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; }
+@media (max-width: 768px) { .inside-gallery { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; gap: 20px; } }
+
+/* ============================================================
+   VIDEO BAND
+   ============================================================ */
+.video-band { position: relative; height: 400px; overflow: hidden; z-index: 2; }
+.video-band video { width: 100%; height: 100%; object-fit: cover; }
+.video-band::before {
+    content: ''; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(180deg, var(--bg-deep) 0%, transparent 25%, transparent 75%, var(--bg-deep) 100%), rgba(10,14,26,0.3);
+}
+.video-band-text {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; align-items: center; justify-content: center; text-align: center; padding: 32px;
+}
+.video-band-text h2 {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 3.5vw, 2.6rem);
+    font-weight: 400; font-style: italic; color: var(--gold-light); max-width: 700px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+}
+@media (max-width: 768px) { .video-band { height: 280px; } }
+
+/* ============================================================
+   RATING SYSTEM
+   ============================================================ */
+.section-ratings { background: radial-gradient(ellipse at 50% 40%, #12102a 0%, var(--bg-deep) 65%); }
+.ratings-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+.rating-card {
+    background: rgba(15,20,36,0.6); border: 1px solid rgba(201,168,76,0.06);
+    border-radius: var(--radius-lg); padding: 40px 24px; text-align: center;
+    transition: 0.4s var(--ease); position: relative; overflow: hidden;
+}
+.rating-card::after {
+    content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 60%; height: 2px; border-radius: 2px; opacity: 0; transition: 0.4s var(--ease);
+}
+.rating-card[data-r="beauty"]::after { background: var(--beauty-color); }
+.rating-card[data-r="power"]::after { background: var(--power-color); }
+.rating-card[data-r="mystery"]::after { background: var(--mystery-color); }
+.rating-card[data-r="wonder"]::after { background: var(--wonder-color); }
+.rating-card:hover { transform: translateY(-6px); border-color: rgba(201,168,76,0.12); }
+.rating-card:hover::after { opacity: 1; height: 3px; }
+.ring-wrap { width: 120px; height: 120px; margin: 0 auto 24px; position: relative; }
+.ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 3; }
+.ring-fill { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 339.292; stroke-dashoffset: 339.292; transition: stroke-dashoffset 1.5s var(--ease); }
+.rating-card[data-r="beauty"] .ring-fill { stroke: var(--beauty-color); }
+.rating-card[data-r="power"] .ring-fill { stroke: var(--power-color); }
+.rating-card[data-r="mystery"] .ring-fill { stroke: var(--mystery-color); }
+.rating-card[data-r="wonder"] .ring-fill { stroke: var(--wonder-color); }
+.ring-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.8rem; }
+.rating-card[data-r="beauty"] h3 { color: var(--beauty-color); }
+.rating-card[data-r="power"] h3 { color: var(--power-color); }
+.rating-card[data-r="mystery"] h3 { color: var(--mystery-color); }
+.rating-card[data-r="wonder"] h3 { color: var(--wonder-color); }
+.rating-card h3 { font-size: 1.15rem; margin-bottom: 10px; }
+.rating-card p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; }
+@media (max-width: 960px) { .ratings-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .ratings-grid { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; } }
+
+/* ============================================================
+   BONUS CONTENT
+   ============================================================ */
+.section-bonus { background: linear-gradient(180deg, var(--bg-deep) 0%, #0e1328 50%, var(--bg-deep) 100%); }
+.bonus-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.bonus-img { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+.bonus-img img { width: 100%; display: block; }
+.bonus-list { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+.bonus-list li {
+    display: flex; gap: 16px; align-items: flex-start; padding: 20px 24px;
+    background: rgba(15,20,36,0.5); border-radius: var(--radius);
+    border: 1px solid rgba(201,168,76,0.05); transition: 0.4s var(--ease);
+}
+.bonus-list li:hover { border-color: rgba(201,168,76,0.12); background: rgba(20,27,51,0.6); }
+.bonus-ic {
+    font-size: 1.3rem; flex-shrink: 0; width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(201,168,76,0.08); border-radius: 10px;
+}
+.bonus-list h3 { font-size: 1rem; margin-bottom: 4px; color: var(--cream); }
+.bonus-list p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.5; }
+@media (max-width: 860px) { .bonus-layout { grid-template-columns: 1fr; gap: 40px; } .bonus-img { max-width: 400px; margin: 0 auto; } }
+
+/* ============================================================
+   VALUE PROPOSITION
+   ============================================================ */
+.section-value { background: radial-gradient(ellipse at 50% 20%, #161218 0%, var(--bg-deep) 60%); text-align: center; }
+.value-num {
+    font-family: 'Cinzel', serif; font-size: clamp(5rem, 12vw, 10rem); font-weight: 700;
+    color: var(--gold); line-height: 1; margin-bottom: 8px;
+    text-shadow: 0 0 60px rgba(201,168,76,0.2);
+}
+.value-sub {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-weight: 400; color: var(--text-bright); margin-bottom: 56px;
+}
+.value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 900px; margin: 0 auto 56px; }
+.value-item {
+    padding: 28px 20px; background: rgba(15,20,36,0.5);
+    border: 1px solid rgba(201,168,76,0.06); border-radius: var(--radius); transition: 0.4s var(--ease);
+}
+.value-item:hover { border-color: rgba(201,168,76,0.15); transform: translateY(-4px); }
+.value-item-n { font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+.value-item-l { font-size: 0.9rem; color: var(--text-dim); }
+.value-cta-text { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic; color: var(--text); margin-bottom: 32px; }
+@media (max-width: 640px) { .value-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ============================================================
+   PERFECT FOR
+   ============================================================ */
+.section-perfect { background: linear-gradient(180deg, var(--bg-deep) 0%, #0e1220 50%, var(--bg-deep) 100%); }
+.perfect-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.perfect-tags { display: flex; flex-wrap: wrap; gap: 12px; }
+.perfect-tag {
+    display: flex; align-items: center; gap: 10px; padding: 14px 24px;
+    background: rgba(15,20,36,0.6); border: 1px solid rgba(201,168,76,0.08);
+    border-radius: 100px; font-size: 0.9rem; color: var(--text-bright);
+    transition: 0.4s var(--ease); white-space: nowrap;
+}
+.perfect-tag:hover { border-color: rgba(201,168,76,0.25); background: rgba(20,27,51,0.8); transform: translateY(-2px); }
+.perfect-tag .pt-ic { font-size: 1.1rem; }
+.perfect-img { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+.perfect-img img { width: 100%; display: block; }
+@media (max-width: 860px) {
+    .perfect-layout { grid-template-columns: 1fr; gap: 40px; }
+    .perfect-img { max-width: 400px; margin: 0 auto; order: -1; }
+    .perfect-tags { justify-content: center; }
+}
+
+/* ============================================================
+   AUTHOR
+   ============================================================ */
+.section-author { background: var(--bg); }
+.author-layout { display: grid; grid-template-columns: 380px 1fr; gap: 64px; align-items: center; max-width: 960px; margin: 0 auto; }
+.author-img { border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4); aspect-ratio: 3/4; }
+.author-img img { width: 100%; height: 100%; object-fit: cover; }
+.author-text h2 { margin-bottom: 20px; }
+.author-text p { font-size: 1rem; color: var(--text); line-height: 1.8; margin-bottom: 16px; }
+@media (max-width: 860px) { .author-layout { grid-template-columns: 1fr; gap: 40px; text-align: center; } .author-img { max-width: 300px; margin: 0 auto; } }
+
+/* ============================================================
+   FINAL CTA
+   ============================================================ */
+.section-final { padding: 160px 0; text-align: center; overflow: hidden; }
+.final-bg { position: absolute; inset: 0; z-index: 0; }
+.final-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; }
+.final-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 60%, rgba(201,168,76,0.08) 0%, transparent 50%),
+                linear-gradient(180deg, var(--bg) 0%, rgba(10,14,26,0.5) 40%, rgba(10,14,26,0.7) 70%, var(--bg) 100%);
+}
+.final-content { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; padding: 0 24px; }
+.final-content h2 { font-size: clamp(2rem, 4.5vw, 3.4rem); margin-bottom: 20px; }
+.final-sub {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2vw, 1.35rem);
+    font-style: italic; color: var(--text); margin-bottom: 44px; line-height: 1.7;
+}
+
+/* === FOOTER === */
+.footer { position: relative; z-index: 2; padding: 48px 32px; text-align: center; border-top: 1px solid rgba(201,168,76,0.06); background: var(--bg-deep); }
+.footer p { font-size: 0.82rem; color: var(--text-dim); }
+.footer-title { font-family: 'Cinzel', serif; font-size: 0.75rem; color: var(--gold-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+
+/* === MOBILE BUY BAR === */
+.mobile-buy-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
+    padding: 12px 20px; background: rgba(10,14,26,0.95);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(201,168,76,0.1);
+    display: none; align-items: center; justify-content: space-between;
+    transform: translateY(100%); transition: transform 0.4s var(--ease);
+}
+.mobile-buy-bar.visible { transform: translateY(0); }
+.mobile-buy-bar .btn { padding: 12px 28px; font-size: 0.85rem; }
+.mobile-buy-title { font-family: 'Cinzel', serif; font-size: 0.7rem; color: var(--gold-dim); letter-spacing: 0.08em; text-transform: uppercase; }
+@media (max-width: 768px) { .mobile-buy-bar { display: flex; } .section-final { padding-bottom: 200px; } }
+
+/* === HERO ENTRANCE ANIMATION === */
+.hero-book-wrap {
+    animation: heroBookIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+.hero-text {
+    animation: heroTextIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+}
+.scroll-indicator {
+    animation: floatY 3s ease-in-out infinite, fadeInLate 1s ease 1.5s both;
+}
+@keyframes heroBookIn {
+    from { opacity: 0; transform: translateX(-60px) scale(0.95); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes heroTextIn {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInLate {
+    from { opacity: 0; }
+    to { opacity: 0.5; }
+}
+@media (max-width: 960px) {
+    .hero-book-wrap { animation-name: heroBookInMobile; }
+    @keyframes heroBookInMobile {
+        from { opacity: 0; transform: translateY(-40px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .hero-text { animation-name: heroTextInMobile; }
+    @keyframes heroTextInMobile {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+}
+
+/* === KEYFRAMES === */
+@keyframes glowPulse { 0%, 100% { opacity: 0.8; transform: translate(-50%,-50%) scale(1); } 50% { opacity: 1; transform: translate(-50%,-50%) scale(1.05); } }
+@keyframes floatY { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(10px); } }
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    .reveal, .reveal-left, .reveal-right { opacity: 1 !important; transform: none !important; }
+}
+    </style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="cursor-glow"></div>
+
+<!-- ========== NAVIGATION ========== -->
+<nav class="nav">
+    <span class="nav-title">42 Wonders</span>
+    <!-- SQUARESPACE: Replace with your native Squarespace Add-to-Cart or product page link -->
+    <a href="#final" class="nav-cta">Buy Now</a>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero" id="hero">
+    <div class="hero-bg">
+        <video autoplay muted loop playsinline>
+            <source src="assets/book-loop.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="hero-content">
+        <div class="hero-book-wrap">
+            <div class="hero-book-glow"></div>
+            <img class="hero-book" src="assets/book-cover-hero.png" alt="42 Wonders of Our Night Sky book" fetchpriority="high">
+            <div class="hero-book-shine"></div>
+        </div>
+        <div class="hero-text">
+            <span class="hero-author">by Damon Scotting</span>
+            <h1><span class="gold">42 Wonders</span><br>of Our Night Sky</h1>
+            <p class="hero-subtitle">A guided celebration of the cosmos &mdash; from your own backyard</p>
+            <p class="hero-desc">Discover the most extraordinary objects in the night sky. Each wonder explored, rated, and brought to life in a book that is equal parts beautiful, educational, and genuinely fun.</p>
+            <div class="hero-ctas">
+                <!-- SQUARESPACE: Replace with native Add-to-Cart button -->
+                <a href="#final" class="btn btn-gold">Buy Now</a>
+                <a href="#inside" class="btn btn-outline">See What's Inside</a>
+            </div>
+        </div>
+    </div>
+    <div class="scroll-indicator">
+        <span>Scroll to explore</span>
+        <div class="scroll-arrow"></div>
+    </div>
+</section>
+
+<div class="gold-divider"><div class="gold-divider-line"></div><div class="gold-divider-diamond"></div><div class="gold-divider-line"></div></div>
+
+<!-- ========== WHAT MAKES IT SPECIAL ========== -->
+<section class="section section-special" id="special">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="eyebrow">What Makes This Book Special</span>
+            <h2>Not Just Another Space Book</h2>
+            <p>This is a structured journey through the night sky's greatest treasures &mdash; with features that turn every page into an experience.</p>
+        </div>
+        <div class="special-layout">
+            <div class="special-book-vis reveal-left">
+                <img src="assets/book-cosmic-bg.png" alt="42 Wonders book floating on a cosmic background" loading="lazy">
+                <div class="special-badge">
+                    <span class="b-num">52</span>
+                    <span class="b-lbl">Total<br>Wonders</span>
+                </div>
+            </div>
+            <div class="feature-cards stagger">
+                <div class="feature-card reveal">
+                    <span class="fc-icon">&#10022;</span>
+                    <h3>42 Handpicked Wonders</h3>
+                    <p>Every object chosen for its ability to inspire awe &mdash; from iconic nebulae to hidden gems most stargazers never hear about.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <span class="fc-icon">&#9733;</span>
+                    <h3>A Unique Rating System</h3>
+                    <p>Each wonder scored across Beauty, Power, Mystery, and Wonder. Compare cosmic objects and discover what makes each one extraordinary.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <span class="fc-icon">+</span>
+                    <h3>10 Bonus Wonders</h3>
+                    <p>Because 42 wasn't quite enough. Ten additional marvels that were too impressive to leave out.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <span class="fc-icon">&#9670;</span>
+                    <h3>Puzzles, Games &amp; More</h3>
+                    <p>Built-in activities and challenges that make this more than a book you read once and shelve.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="gold-divider"><div class="gold-divider-line"></div><div class="gold-divider-diamond"></div><div class="gold-divider-line"></div></div>
+
+<!-- ========== INSIDE THE BOOK ========== -->
+<section class="section section-inside" id="inside">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="eyebrow">Inside the Book</span>
+            <h2>Step Inside</h2>
+            <p>Every page designed to feel like looking through a telescope for the first time. Rich visuals, structured detail, and that unmistakable sense of discovery.</p>
+        </div>
+        <div class="inside-gallery stagger">
+            <div class="gallery-card reveal">
+                <img src="assets/spread-dark.png" alt="Book spread showing a wonder profile" loading="lazy">
+                <div class="gallery-overlay">
+                    <h3>Full-Page Wonder Profiles</h3>
+                    <p>Each object gets a richly illustrated spread &mdash; facts, stunning imagery, and ratings at a glance.</p>
+                </div>
+            </div>
+            <div class="gallery-card reveal">
+                <img src="assets/spread-hands.png" alt="Reader exploring the book" loading="lazy">
+                <div class="gallery-overlay">
+                    <h3>Designed to Explore</h3>
+                    <p>Structured layouts invite you to discover details, compare ratings, and lose yourself in the cosmos.</p>
+                </div>
+            </div>
+            <div class="gallery-card reveal">
+                <img src="assets/spread-instruments.png" alt="Book open with astronomy instruments" loading="lazy">
+                <div class="gallery-overlay">
+                    <h3>A Collector's Experience</h3>
+                    <p>More than a reference &mdash; a book you want to display and revisit night after night.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== VIDEO BAND ========== -->
+<section class="video-band">
+    <video autoplay muted loop playsinline>
+        <source src="assets/cosmic-flow.mp4" type="video/mp4">
+    </video>
+    <div class="video-band-text">
+        <h2 class="reveal">Every object in the night sky has a story.<br>This book helps you discover them.</h2>
+    </div>
+</section>
+
+<!-- ========== THE RATING SYSTEM ========== -->
+<section class="section section-ratings" id="ratings">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="eyebrow">The Rating System</span>
+            <h2>Four Dimensions of Wonder</h2>
+            <p>Every object in the book is scored across four unique categories &mdash; turning each wonder into something you can compare, debate, and remember.</p>
+        </div>
+        <div class="ratings-grid stagger" id="ratingsGrid">
+            <div class="rating-card reveal" data-r="beauty">
+                <div class="ring-wrap">
+                    <svg class="ring-svg" viewBox="0 0 120 120">
+                        <circle class="ring-bg" cx="60" cy="60" r="54"/>
+                        <circle class="ring-fill" cx="60" cy="60" r="54" data-value="88"/>
+                    </svg>
+                    <span class="ring-icon">&#10022;</span>
+                </div>
+                <h3>Beauty</h3>
+                <p>How visually stunning is this object? From delicate star clusters to jaw-dropping nebulae.</p>
+            </div>
+            <div class="rating-card reveal" data-r="power">
+                <div class="ring-wrap">
+                    <svg class="ring-svg" viewBox="0 0 120 120">
+                        <circle class="ring-bg" cx="60" cy="60" r="54"/>
+                        <circle class="ring-fill" cx="60" cy="60" r="54" data-value="75"/>
+                    </svg>
+                    <span class="ring-icon">&#9889;</span>
+                </div>
+                <h3>Power</h3>
+                <p>The raw force behind the wonder. Supernovae, black holes, and the engines of the universe.</p>
+            </div>
+            <div class="rating-card reveal" data-r="mystery">
+                <div class="ring-wrap">
+                    <svg class="ring-svg" viewBox="0 0 120 120">
+                        <circle class="ring-bg" cx="60" cy="60" r="54"/>
+                        <circle class="ring-fill" cx="60" cy="60" r="54" data-value="92"/>
+                    </svg>
+                    <span class="ring-icon">&#9670;</span>
+                </div>
+                <h3>Mystery</h3>
+                <p>How much remains unknown? The objects that still challenge our deepest understanding of the cosmos.</p>
+            </div>
+            <div class="rating-card reveal" data-r="wonder">
+                <div class="ring-wrap">
+                    <svg class="ring-svg" viewBox="0 0 120 120">
+                        <circle class="ring-bg" cx="60" cy="60" r="54"/>
+                        <circle class="ring-fill" cx="60" cy="60" r="54" data-value="95"/>
+                    </svg>
+                    <span class="ring-icon">&#10023;</span>
+                </div>
+                <h3>Wonder</h3>
+                <p>Pure awe. That feeling when you realise the scale, beauty, and strangeness of what you're looking at.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="gold-divider"><div class="gold-divider-line"></div><div class="gold-divider-diamond"></div><div class="gold-divider-line"></div></div>
+
+<!-- ========== BONUS CONTENT ========== -->
+<section class="section section-bonus" id="bonus">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="eyebrow">More Than a Book</span>
+            <h2>More Than You'd Expect</h2>
+            <p>Packed with extras that make this feel like an entire astronomy experience between two covers.</p>
+        </div>
+        <div class="bonus-layout">
+            <div class="bonus-img reveal-left">
+                <img src="assets/reading-window.png" alt="Reader enjoying 42 Wonders" loading="lazy">
+            </div>
+            <ul class="bonus-list stagger">
+                <li class="reveal">
+                    <span class="bonus-ic">&#10022;</span>
+                    <div>
+                        <h3>10 Bonus Wonders</h3>
+                        <p>An extra collection of astronomical marvels &mdash; from surprising phenomena to beloved deep-sky treasures.</p>
+                    </div>
+                </li>
+                <li class="reveal">
+                    <span class="bonus-ic">&#9670;</span>
+                    <div>
+                        <h3>Puzzles &amp; Challenges</h3>
+                        <p>Test your cosmic knowledge with built-in activities designed to entertain and educate.</p>
+                    </div>
+                </li>
+                <li class="reveal">
+                    <span class="bonus-ic">&#9733;</span>
+                    <div>
+                        <h3>Stargazing Guidance</h3>
+                        <p>Practical tips and how-to content to help you find and enjoy these wonders in the real night sky.</p>
+                    </div>
+                </li>
+                <li class="reveal">
+                    <span class="bonus-ic">&#10023;</span>
+                    <div>
+                        <h3>Premium Visual Design</h3>
+                        <p>Every page crafted for visual impact &mdash; a book that looks as beautiful closed as it does open.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<div class="gold-divider"><div class="gold-divider-line"></div><div class="gold-divider-diamond"></div><div class="gold-divider-line"></div></div>
+
+<!-- ========== VALUE PROPOSITION ========== -->
+<section class="section section-value" id="value">
+    <div class="container">
+        <div class="reveal">
+            <span class="eyebrow">Why It's a Bargain</span>
+            <div class="value-num">52</div>
+            <p class="value-sub">Wonders. Countless discoveries. One beautifully crafted book.</p>
+        </div>
+        <div class="value-grid stagger">
+            <div class="value-item reveal">
+                <div class="value-item-n">42</div>
+                <div class="value-item-l">Main Wonders</div>
+            </div>
+            <div class="value-item reveal">
+                <div class="value-item-n">10</div>
+                <div class="value-item-l">Bonus Wonders</div>
+            </div>
+            <div class="value-item reveal">
+                <div class="value-item-n">4</div>
+                <div class="value-item-l">Rating Dimensions</div>
+            </div>
+            <div class="value-item reveal">
+                <div class="value-item-n">&#10022;</div>
+                <div class="value-item-l">Puzzles &amp; Games</div>
+            </div>
+            <div class="value-item reveal">
+                <div class="value-item-n">&#9733;</div>
+                <div class="value-item-l">Stargazing Guides</div>
+            </div>
+            <div class="value-item reveal">
+                <div class="value-item-n">&#10023;</div>
+                <div class="value-item-l">Gift-Ready Design</div>
+            </div>
+        </div>
+        <div class="reveal">
+            <p class="value-cta-text">Everything a stargazer could want &mdash; for the price of a single evening out.</p>
+            <!-- SQUARESPACE: Replace with native Add-to-Cart button -->
+            <a href="#final" class="btn btn-gold">Buy Now</a>
+        </div>
+    </div>
+</section>
+
+<!-- ========== PERFECT FOR ========== -->
+<section class="section section-perfect" id="perfect">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="eyebrow">Who Will Love This</span>
+            <h2>The Perfect Gift for Anyone Who's Ever Looked Up</h2>
+        </div>
+        <div class="perfect-layout">
+            <div class="perfect-tags stagger">
+                <div class="perfect-tag reveal"><span class="pt-ic">&#128301;</span> Stargazers</div>
+                <div class="perfect-tag reveal"><span class="pt-ic">&#127756;</span> Space Enthusiasts</div>
+                <div class="perfect-tag reveal"><span class="pt-ic">&#128270;</span> Curious Beginners</div>
+                <div class="perfect-tag reveal"><span class="pt-ic">&#128301;</span> Telescope Owners</div>
+                <div class="perfect-tag reveal"><span class="pt-ic">&#128106;</span> Families</div>
+                <div class="perfect-tag reveal"><span class="pt-ic">&#127873;</span> Gift Buyers</div>
+                <div class="perfect-tag reveal"><span class="pt-ic">&#128218;</span> Coffee Table Book Lovers</div>
+                <div class="perfect-tag reveal"><span class="pt-ic">&#127776;</span> Night Sky Dreamers</div>
+            </div>
+            <div class="perfect-img reveal-right">
+                <img src="assets/book-telescope.png" alt="42 Wonders with telescope" loading="lazy">
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="gold-divider"><div class="gold-divider-line"></div><div class="gold-divider-diamond"></div><div class="gold-divider-line"></div></div>
+
+<!-- ========== AUTHOR ========== -->
+<section class="section section-author" id="author">
+    <div class="container">
+        <div class="author-layout">
+            <div class="author-img reveal-left">
+                <img src="assets/book-desk-night.png" alt="42 Wonders on a desk by a starry window" loading="lazy">
+            </div>
+            <div class="author-text reveal-right">
+                <span class="eyebrow">About the Author</span>
+                <h2>Damon Scotting</h2>
+                <p>Damon is an astronomy communicator and creator driven by a simple belief: the night sky belongs to everyone.</p>
+                <p>Through astrophotography, science communication, and a genuine passion for making the cosmos accessible, Damon created this book to share the wonders that keep him looking up &mdash; night after night.</p>
+                <p>42 Wonders of Our Night Sky is the result of that passion: a book designed to inspire anyone to step outside, look up, and see the universe with fresh eyes.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== FINAL CTA ========== -->
+<section class="section section-final" id="final">
+    <div class="final-bg">
+        <img src="assets/hero-marketing.png" alt="" loading="lazy">
+    </div>
+    <div class="final-content reveal">
+        <span class="eyebrow">Start Your Journey</span>
+        <h2>Your Night Sky<br>Adventure Starts Here</h2>
+        <p class="final-sub">42 wonders. 10 bonus discoveries. Puzzles, ratings, and a universe of inspiration &mdash; all in one beautifully crafted book.</p>
+        <!--
+        ════════════════════════════════════════════════════════
+        SQUARESPACE INTEGRATION POINT
+        ────────────────────────────────────────────────────────
+        Replace this button with your Squarespace Add-to-Cart
+        button or Buy button block. Options:
+
+        1. PRODUCT PAGE LINK — Link to your Squarespace product page URL.
+        2. ADD-TO-CART BUTTON — Use a Squarespace Button block
+           with the "Add to Cart" action linked to your product.
+        3. DIRECT ADD-TO-CART URL — Format:
+           /shop/p/your-product-slug
+        ════════════════════════════════════════════════════════
+        -->
+        <a href="#" class="btn btn-gold btn-large">Add to Cart</a>
+    </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+    <p class="footer-title">42 Wonders of Our Night Sky</p>
+    <p>&copy; Damon Scotting. All rights reserved.</p>
+</footer>
+
+<!-- ========== MOBILE BUY BAR ========== -->
+<div class="mobile-buy-bar">
+    <span class="mobile-buy-title">42 Wonders</span>
+    <!-- SQUARESPACE: Replace with native Add-to-Cart button -->
+    <a href="#final" class="btn btn-gold">Buy Now</a>
+</div>
+
+<!-- ================================================================
+     JAVASCRIPT
+     ================================================================ -->
+<script>
+(function() {
+    'use strict';
+    const isMobile = window.innerWidth < 768;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ============================
+       STARFIELD CANVAS
+       ============================ */
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let stars = [], shootingStars = [];
+    let mouseX = 0, mouseY = 0, canvasW, canvasH;
+    const STAR_COUNT = isMobile ? 100 : 260;
+
+    function resizeCanvas() {
+        canvasW = canvas.width = window.innerWidth;
+        canvasH = canvas.height = window.innerHeight;
+    }
+
+    function createStars() {
+        stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+            stars.push({
+                x: Math.random() * canvasW,
+                y: Math.random() * canvasH,
+                size: Math.random() * 1.8 + 0.3,
+                layer: Math.floor(Math.random() * 3),
+                twinkleOff: Math.random() * Math.PI * 2,
+                twinkleSpd: Math.random() * 0.015 + 0.005,
+                bright: Math.random() * 0.5 + 0.5
+            });
+        }
+    }
+
+    function spawnShooter() {
+        if (shootingStars.length > 2 || prefersReducedMotion) return;
+        shootingStars.push({
+            x: Math.random() * canvasW * 0.8,
+            y: Math.random() * canvasH * 0.4,
+            len: Math.random() * 80 + 40,
+            speed: Math.random() * 6 + 4,
+            angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3,
+            life: 0, maxLife: 40 + Math.random() * 30
+        });
+    }
+
+    let lastT = 0;
+    function drawStars(time) {
+        const dt = Math.min((time - lastT) / 16.67, 2);
+        lastT = time;
+        ctx.clearRect(0, 0, canvasW, canvasH);
+        const t = time * 0.001;
+
+        for (const s of stars) {
+            const px = (s.layer + 1) * (isMobile ? 3 : 6);
+            const sx = s.x + mouseX * px;
+            const sy = s.y + mouseY * px;
+            const tw = Math.sin(t * s.twinkleSpd * 60 + s.twinkleOff) * 0.35 + 0.65;
+            const a = s.bright * tw;
+            ctx.beginPath();
+            ctx.arc(sx, sy, s.size, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255,252,240,' + a + ')';
+            ctx.fill();
+            if (s.size > 1.3) {
+                ctx.beginPath();
+                ctx.arc(sx, sy, s.size * 2.5, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(210,200,170,' + (a * 0.1) + ')';
+                ctx.fill();
+            }
+        }
+
+        for (let i = shootingStars.length - 1; i >= 0; i--) {
+            const s = shootingStars[i];
+            s.life += dt;
+            s.x += Math.cos(s.angle) * s.speed * dt;
+            s.y += Math.sin(s.angle) * s.speed * dt;
+            const p = s.life / s.maxLife;
+            const a = p < 0.5 ? 1 : 1 - (p - 0.5) * 2;
+            ctx.beginPath();
+            ctx.moveTo(s.x, s.y);
+            ctx.lineTo(s.x - Math.cos(s.angle) * s.len * (1 - p), s.y - Math.sin(s.angle) * s.len * (1 - p));
+            const g = ctx.createLinearGradient(s.x, s.y, s.x - Math.cos(s.angle) * s.len, s.y - Math.sin(s.angle) * s.len);
+            g.addColorStop(0, 'rgba(255,240,200,' + a + ')');
+            g.addColorStop(1, 'rgba(255,240,200,0)');
+            ctx.strokeStyle = g;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            if (s.life >= s.maxLife) shootingStars.splice(i, 1);
+        }
+
+        requestAnimationFrame(drawStars);
+    }
+
+    if (!prefersReducedMotion) {
+        resizeCanvas();
+        createStars();
+        requestAnimationFrame(drawStars);
+        window.addEventListener('resize', () => { resizeCanvas(); createStars(); });
+        if (!isMobile) {
+            window.addEventListener('mousemove', e => {
+                mouseX = (e.clientX / canvasW - 0.5) * 2;
+                mouseY = (e.clientY / canvasH - 0.5) * 2;
+            });
+        }
+        setInterval(() => { if (Math.random() > 0.4) spawnShooter(); }, 5000);
+    }
+
+    /* ============================
+       CURSOR GLOW
+       ============================ */
+    if (!isMobile && !prefersReducedMotion) {
+        const glow = document.querySelector('.cursor-glow');
+        let gx = 0, gy = 0, tx = 0, ty = 0;
+        document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+        (function updateGlow() {
+            gx += (tx - gx) * 0.08;
+            gy += (ty - gy) * 0.08;
+            glow.style.left = gx + 'px';
+            glow.style.top = gy + 'px';
+            requestAnimationFrame(updateGlow);
+        })();
+    }
+
+    /* ============================
+       NAVIGATION
+       ============================ */
+    const nav = document.querySelector('.nav');
+    let navVis = false;
+    function checkNav() {
+        const show = window.scrollY > window.innerHeight * 0.5;
+        if (show !== navVis) { navVis = show; nav.classList.toggle('visible', show); }
+    }
+    window.addEventListener('scroll', checkNav, { passive: true });
+
+    /* ============================
+       MOBILE BUY BAR
+       ============================ */
+    const mBar = document.querySelector('.mobile-buy-bar');
+    let mBarVis = false;
+    function checkMBar() {
+        if (window.innerWidth > 768) return;
+        const show = window.scrollY > window.innerHeight;
+        if (show !== mBarVis) { mBarVis = show; mBar.classList.toggle('visible', show); }
+    }
+    window.addEventListener('scroll', checkMBar, { passive: true });
+
+    /* ============================
+       SCROLL REVEAL
+       ============================ */
+    const revealObs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('revealed'); });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => revealObs.observe(el));
+
+    /* ============================
+       RATING RINGS ANIMATION
+       ============================ */
+    const ratingObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.querySelectorAll('.ring-fill').forEach(fill => {
+                    const v = parseInt(fill.dataset.value) || 0;
+                    const circ = 2 * Math.PI * 54;
+                    fill.style.strokeDashoffset = circ - (v / 100) * circ;
+                });
+                ratingObs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.3 });
+    const rGrid = document.getElementById('ratingsGrid');
+    if (rGrid) ratingObs.observe(rGrid);
+
+    /* ============================
+       3D BOOK TILT
+       ============================ */
+    if (!isMobile && !prefersReducedMotion) {
+        const bWrap = document.querySelector('.hero-book-wrap');
+        const book = document.querySelector('.hero-book');
+        const shine = document.querySelector('.hero-book-shine');
+        if (bWrap && book) {
+            bWrap.addEventListener('mousemove', e => {
+                const r = bWrap.getBoundingClientRect();
+                const x = (e.clientX - r.left) / r.width - 0.5;
+                const y = (e.clientY - r.top) / r.height - 0.5;
+                book.style.transform = 'perspective(1000px) rotateY(' + (x * 12) + 'deg) rotateX(' + (-y * 8) + 'deg)';
+                if (shine) {
+                    const angle = 105 + x * 40;
+                    const intensity = 0.05 + Math.abs(x) * 0.15;
+                    shine.style.background = 'linear-gradient(' + angle + 'deg, transparent 30%, rgba(255,219,112,' + intensity + ') 45%, rgba(255,219,112,' + (intensity * 2) + ') 50%, rgba(255,219,112,' + intensity + ') 55%, transparent 70%)';
+                }
+            });
+            bWrap.addEventListener('mouseleave', () => {
+                book.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg)';
+            });
+        }
+    }
+
+    /* ============================
+       HERO PARALLAX ON SCROLL
+       ============================ */
+    if (!isMobile && !prefersReducedMotion) {
+        const heroBg = document.querySelector('.hero-bg');
+        const heroContent = document.querySelector('.hero-content');
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const scrollY = window.scrollY;
+                    if (scrollY < window.innerHeight * 1.5) {
+                        heroBg.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
+                        heroContent.style.transform = 'translateY(' + (scrollY * 0.1) + 'px)';
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+    }
+
+    /* ============================
+       SMOOTH SCROLL
+       ============================ */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const t = document.querySelector(a.getAttribute('href'));
+            if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        });
+    });
+})();
+</script>
+</body>
+</html>
