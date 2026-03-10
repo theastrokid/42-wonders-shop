@@ -121,6 +121,15 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
     color: var(--bg-deep); box-shadow: 0 4px 24px rgba(201,168,76,0.25);
 }
 .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(201,168,76,0.35); background: linear-gradient(135deg, var(--gold-light), var(--gold)); }
+.btn-gold:active { transform: translateY(1px) scale(0.98); box-shadow: 0 2px 12px rgba(201,168,76,0.2); transition-duration: 0.1s; }
+.btn-cart { position: relative; overflow: hidden; }
+.btn-cart::after {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    width: 0; height: 0; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    transform: translate(-50%, -50%); transition: width 0.5s ease, height 0.5s ease;
+}
+.btn-cart:active::after { width: 300px; height: 300px; }
 .btn-outline { background: transparent; color: var(--gold); border: 1.5px solid rgba(201,168,76,0.4); }
 .btn-outline:hover { border-color: var(--gold); background: rgba(201,168,76,0.08); transform: translateY(-2px); }
 .btn-large { padding: 18px 52px; font-size: 1.02rem; }
@@ -159,7 +168,7 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
 }
 .hero-book-wrap { position: relative; flex-shrink: 0; perspective: 1200px; }
 .hero-book {
-    width: 320px; border-radius: 8px;
+    width: 340px; border-radius: 12px;
     box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(201,168,76,0.1);
     transition: transform 0.4s var(--ease); transform-style: preserve-3d; will-change: transform;
 }
@@ -225,14 +234,20 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
     .hero-content { flex-direction: column; text-align: center; gap: 40px; padding-top: 120px; align-items: center; }
     .hero-book { width: 240px; }
     .hero-text { max-width: 100%; padding-top: 0; }
+    .hero-text h1 { font-size: clamp(2rem, 8vw, 3rem); text-align: center; }
     .hero-ctas { justify-content: center; }
     .hero-bullets { display: inline-block; text-align: left; }
     .hero-price-row { justify-content: center; }
     .hero-trust { justify-content: center; }
+    .hero-author { text-align: center; }
+    .hero-subtitle { text-align: center; }
 }
 @media (max-width: 480px) {
-    .hero-book { width: 200px; }
+    .hero-book { width: 180px; }
+    .hero-text h1 { font-size: 1.85rem; line-height: 1.2; }
     .hero-ctas { flex-direction: column; align-items: stretch; }
+    .hero-bullets li { font-size: 0.85rem; }
+    .hero-price { font-size: 1.8rem; }
 }
 
 /* ============================================================
@@ -445,14 +460,26 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
     border-radius: var(--radius); padding: 32px 28px; position: relative;
     transition: 0.4s var(--ease);
 }
-.proof-card:hover { border-color: rgba(201,168,76,0.12); transform: translateY(-3px); }
-.proof-stars { color: var(--gold); font-size: 0.85rem; letter-spacing: 2px; margin-bottom: 16px; }
-.proof-text { font-size: 0.92rem; color: var(--text); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
-.proof-author { font-size: 0.82rem; color: var(--text-dim); }
-.proof-author strong { color: var(--cream); font-weight: 600; }
+.proof-card:hover { border-color: rgba(201,168,76,0.15); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
+.proof-quote-mark {
+    font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1;
+    color: var(--gold); opacity: 0.25; position: absolute; top: 20px; right: 24px;
+}
+.proof-stars { color: var(--gold); font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 14px; }
+.proof-text { font-size: 0.92rem; color: var(--text); line-height: 1.75; margin-bottom: 20px; }
+.proof-author-row { display: flex; align-items: center; gap: 12px; }
+.proof-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
+    border: 1px solid rgba(201,168,76,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 600; color: var(--gold); letter-spacing: 0.03em;
+}
+.proof-name { font-size: 0.85rem; color: var(--cream); font-weight: 600; }
+.proof-label { font-size: 0.72rem; color: var(--text-dim); margin-top: 1px; }
 .proof-placeholder-note {
-    text-align: center; margin-top: 28px; font-size: 0.78rem; color: var(--text-dim);
-    font-style: italic; opacity: 0.6;
+    text-align: center; margin-top: 28px; font-size: 0.75rem; color: var(--text-dim);
+    font-style: italic; opacity: 0.5;
 }
 @media (max-width: 768px) { .proof-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; } }
 
@@ -556,9 +583,43 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
 .final-reassurance span { display: flex; align-items: center; gap: 5px; }
 
 /* === FOOTER === */
-.footer { position: relative; z-index: 2; padding: 44px 32px; text-align: center; border-top: 1px solid rgba(201,168,76,0.06); background: var(--bg-deep); }
-.footer p { font-size: 0.8rem; color: var(--text-dim); }
-.footer-title { font-family: 'Cinzel', serif; font-size: 0.72rem; color: var(--gold-dim); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+.footer { position: relative; z-index: 2; border-top: 1px solid rgba(201,168,76,0.08); background: var(--bg-deep); }
+.footer-inner {
+    max-width: 1000px; margin: 0 auto; padding: 56px 32px 32px;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 40px;
+}
+.footer-brand {}
+.footer-title { font-family: 'Cinzel', serif; font-size: 0.78rem; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+.footer-tagline { font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; color: var(--text-dim); font-style: italic; }
+.footer-links { display: flex; gap: 28px; padding-top: 4px; }
+.footer-link {
+    font-size: 0.82rem; color: var(--text-dim); transition: color 0.3s ease;
+    position: relative;
+}
+.footer-link:hover { color: var(--gold); }
+.footer-link::after {
+    content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1px;
+    background: var(--gold); transition: width 0.3s ease;
+}
+.footer-link:hover::after { width: 100%; }
+.footer-social { display: flex; gap: 12px; padding-top: 2px; }
+.footer-social-icon {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.1);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-dim); transition: 0.3s var(--ease);
+}
+.footer-social-icon:hover { color: var(--gold); border-color: rgba(201,168,76,0.3); background: rgba(201,168,76,0.1); transform: translateY(-2px); }
+.footer-bottom {
+    max-width: 1000px; margin: 0 auto; padding: 20px 32px;
+    border-top: 1px solid rgba(201,168,76,0.04); text-align: center;
+}
+.footer-bottom p { font-size: 0.75rem; color: var(--text-dim); opacity: 0.6; }
+@media (max-width: 768px) {
+    .footer-inner { flex-direction: column; align-items: center; text-align: center; gap: 28px; }
+    .footer-links { flex-direction: column; gap: 14px; align-items: center; }
+    .footer-link::after { display: none; }
+}
 
 /* === STICKY PURCHASE BAR (MOBILE) === */
 .sticky-bar {
@@ -622,7 +683,7 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
 <nav class="nav">
     <div class="nav-left">
         <span class="nav-title">42 Wonders</span>
-        <span class="nav-price"><strong>&pound;TBC</strong> &mdash; Paperback</span>
+        <span class="nav-price"><strong>&pound;29.99</strong> &mdash; Collector's Edition</span>
     </div>
     <!-- SQUARESPACE: Replace with your native Add-to-Cart button -->
     <a href="#final" class="nav-cta">Buy Now</a>
@@ -638,7 +699,7 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
     <div class="hero-content">
         <div class="hero-book-wrap">
             <div class="hero-book-glow"></div>
-            <img class="hero-book" src="assets/book-cover-hero.png" alt="42 Wonders of Our Night Sky book" fetchpriority="high">
+            <img class="hero-book" src="assets/book-hero-new.png" alt="42 Wonders of Our Night Sky book" fetchpriority="high">
             <div class="hero-book-shine"></div>
         </div>
         <div class="hero-text">
@@ -652,18 +713,18 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
             </ul>
             <div class="hero-purchase">
                 <div class="hero-price-row">
-                    <span class="hero-price">&pound;TBC</span>
-                    <span class="hero-format-tag">Paperback</span>
+                    <span class="hero-price">&pound;29.99</span>
+                    <span class="hero-format-tag">Collector's Edition</span>
                 </div>
                 <div class="hero-ctas">
-                    <!-- SQUARESPACE: Replace with native Add-to-Cart button -->
-                    <a href="#final" class="btn btn-gold">Add to Cart</a>
+                    <!-- SQUARESPACE: Replace href with your product page URL or Add-to-Cart link -->
+                    <a href="#final" class="btn btn-gold btn-cart">Add to Cart</a>
                     <a href="#inside" class="btn btn-outline">Look Inside</a>
                 </div>
                 <div class="hero-trust">
-                    <span><span class="trust-ic">&#10003;</span> Free UK Shipping</span>
                     <span><span class="trust-ic">&#10003;</span> Secure Checkout</span>
                     <span><span class="trust-ic">&#10003;</span> Premium Quality Print</span>
+                    <span><span class="trust-ic">&#10003;</span> 48hr Dispatch</span>
                 </div>
             </div>
         </div>
@@ -692,7 +753,7 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
             </div>
             <div class="diff-card reveal">
                 <div class="diff-icon">&#9733;</div>
-                <h3>52 Wonders Total</h3>
+                <h3>42 + 10 Bonus Wonders</h3>
                 <p>42 handpicked deep-sky objects plus 10 bonus wonders. Each chosen for its ability to inspire genuine awe.</p>
             </div>
             <div class="diff-card reveal">
@@ -893,26 +954,47 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
     <div class="container">
         <div class="section-header reveal">
             <span class="eyebrow">What Readers Say</span>
-            <h2>Early Reactions</h2>
+            <h2>Reader Reviews</h2>
         </div>
         <div class="proof-grid stagger">
             <div class="proof-card reveal">
+                <div class="proof-quote-mark">&ldquo;</div>
                 <div class="proof-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                <p class="proof-text">"The rating system is genius. My kids and I argue about which wonder should score highest &mdash; we've been through it three times already."</p>
-                <div class="proof-author"><strong>Placeholder Reviewer</strong> &mdash; Verified Buyer</div>
+                <p class="proof-text">A masterpiece for any astronomy lover. The rating system is genius &mdash; my kids and I argue about which wonder should score highest. We've been through it three times already.</p>
+                <div class="proof-author-row">
+                    <div class="proof-avatar">JD</div>
+                    <div>
+                        <div class="proof-name">John D.</div>
+                        <div class="proof-label">Verified Buyer</div>
+                    </div>
+                </div>
             </div>
             <div class="proof-card reveal">
+                <div class="proof-quote-mark">&ldquo;</div>
                 <div class="proof-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                <p class="proof-text">"It's the first astronomy book I've seen that makes you want to actually go outside with it. Beautifully produced."</p>
-                <div class="proof-author"><strong>Placeholder Reviewer</strong> &mdash; Verified Buyer</div>
+                <p class="proof-text">The first astronomy book I've seen that makes you want to actually go outside with it. Stunning production quality and genuinely fun to explore.</p>
+                <div class="proof-author-row">
+                    <div class="proof-avatar">SR</div>
+                    <div>
+                        <div class="proof-name">Sarah R.</div>
+                        <div class="proof-label">Verified Buyer</div>
+                    </div>
+                </div>
             </div>
             <div class="proof-card reveal">
+                <div class="proof-quote-mark">&ldquo;</div>
                 <div class="proof-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                <p class="proof-text">"Bought this as a gift for my partner. They haven't put it down. The puzzles and games are a lovely surprise."</p>
-                <div class="proof-author"><strong>Placeholder Reviewer</strong> &mdash; Verified Buyer</div>
+                <p class="proof-text">Bought this as a gift and they haven't put it down. The puzzles and games are a lovely surprise &mdash; it's so much more than a coffee table book.</p>
+                <div class="proof-author-row">
+                    <div class="proof-avatar">MK</div>
+                    <div>
+                        <div class="proof-name">Mark K.</div>
+                        <div class="proof-label">Verified Buyer</div>
+                    </div>
+                </div>
             </div>
         </div>
-        <p class="proof-placeholder-note reveal">(Reviews shown are placeholder examples &mdash; replace with real reviews when available)</p>
+        <p class="proof-placeholder-note reveal">(Placeholder reviews &mdash; replace with real testimonials when available)</p>
     </div>
 </section>
 
@@ -993,13 +1075,13 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
             <div class="details-col reveal-left">
                 <h3>Product Details</h3>
                 <table class="details-table">
+                    <tr><td>Edition</td><td>Collector's Edition</td></tr>
                     <tr><td>Format</td><td>Paperback</td></tr>
-                    <tr><td>Pages</td><td>TBC</td></tr>
-                    <tr><td>Dimensions</td><td>TBC</td></tr>
+                    <tr><td>Price</td><td>&pound;29.99</td></tr>
                     <tr><td>Wonders Included</td><td>42 + 10 Bonus</td></tr>
                     <tr><td>Extras</td><td>Puzzles, Games, Stargazing Tips</td></tr>
                     <tr><td>Rating System</td><td>Beauty, Power, Mystery, Wonder</td></tr>
-                    <tr><td>Shipping</td><td>Free UK Delivery</td></tr>
+                    <tr><td>Dispatch</td><td>Within 48 hours</td></tr>
                 </table>
             </div>
             <div class="details-col reveal-right">
@@ -1031,7 +1113,7 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
                             <span>Where do you ship?</span>
                             <span class="faq-arrow">&#9660;</span>
                         </div>
-                        <div class="faq-a"><div class="faq-a-inner">We offer free shipping across the UK. International shipping options are available at checkout. Delivery times and rates vary by location.</div></div>
+                        <div class="faq-a"><div class="faq-a-inner">We dispatch all orders within 48 hours. UK and international shipping options are available at checkout. Delivery times vary by location.</div></div>
                     </div>
                     <div class="faq-item">
                         <div class="faq-q">
@@ -1055,8 +1137,8 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
         <span class="eyebrow">Start Your Journey</span>
         <h2>The Night Sky,<br>Like You've Never Seen It</h2>
         <p class="final-sub">42 wonders. 10 bonus discoveries. A rating system that changes how you look at the cosmos.</p>
-        <div class="final-price">&pound;TBC</div>
-        <p class="final-format">Paperback &bull; Free UK Shipping</p>
+        <div class="final-price">&pound;29.99</div>
+        <p class="final-format">Collector's Edition &bull; Paperback</p>
         <!--
         ════════════════════════════════════════════════════════
         SQUARESPACE INTEGRATION POINT
@@ -1071,10 +1153,11 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
            /shop/p/your-product-slug
         ════════════════════════════════════════════════════════
         -->
-        <a href="#" class="btn btn-gold btn-large">Add to Cart</a>
+        <!-- SQUARESPACE: Replace href with your product page URL or Add-to-Cart link -->
+        <a href="#" class="btn btn-gold btn-large btn-cart">Add to Cart</a>
         <div class="final-reassurance">
             <span>&#10003; Secure Checkout</span>
-            <span>&#10003; Free UK Delivery</span>
+            <span>&#10003; 48hr Dispatch</span>
             <span>&#10003; Premium Print Quality</span>
         </div>
     </div>
@@ -1082,15 +1165,38 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
 
 <!-- ========== FOOTER ========== -->
 <footer class="footer">
-    <p class="footer-title">42 Wonders of Our Night Sky</p>
-    <p>&copy; Damon Scotting. All rights reserved.</p>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <p class="footer-title">42 Wonders of Our Night Sky</p>
+            <p class="footer-tagline">A guided celebration of the cosmos</p>
+        </div>
+        <div class="footer-links">
+            <a href="#" class="footer-link">Contact Us</a>
+            <a href="#" class="footer-link">Shipping &amp; Returns</a>
+            <a href="#" class="footer-link">Privacy Policy</a>
+        </div>
+        <div class="footer-social">
+            <a href="#" class="footer-social-icon" aria-label="Instagram">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="Facebook">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon" aria-label="Twitter / X">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l6.5 8L4 20h2l5.5-6.8L16 20h4l-6.8-8.5L20 4h-2l-5.2 6.3L8 4H4z"/></svg>
+            </a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Damon Scotting. All rights reserved.</p>
+    </div>
 </footer>
 
 <!-- ========== STICKY PURCHASE BAR ========== -->
 <div class="sticky-bar" id="stickyBar">
     <div class="sticky-bar-info">
         <span class="sticky-bar-title">42 Wonders</span>
-        <span class="sticky-bar-price">&pound;TBC</span>
+        <span class="sticky-bar-price">&pound;29.99</span>
     </div>
     <!-- SQUARESPACE: Replace with native Add-to-Cart button -->
     <a href="#final" class="btn btn-gold">Buy Now</a>
