@@ -172,10 +172,25 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
 .vis-stars{display:flex;gap:4px;font-size:1rem}
 .vis-stars .filled{color:var(--gold)}.vis-stars .empty{color:rgba(255,215,0,0.2)}
 
-/* Book Divider */
-.book-divider{display:flex;align-items:center;justify-content:center;gap:20px;padding:20px 0;max-width:200px;margin:0 auto;position:relative;z-index:2;opacity:0.4}
-.book-divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-secondary),transparent)}
-.book-divider-diamond{width:6px;height:6px;background:var(--gold-secondary);transform:rotate(45deg);flex-shrink:0}
+/* Cosmic Divider */
+.cosmic-divider{position:relative;height:100px;overflow:hidden;z-index:2}
+.cosmic-divider::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at 50% 50%,rgba(255,215,0,0.05) 0%,rgba(0,184,148,0.02) 30%,transparent 65%);
+    animation:nebulaBreath 10s ease-in-out infinite;
+}
+.cosmic-divider-line{
+    position:absolute;top:50%;left:10%;right:10%;height:1px;transform:translateY(-50%);
+    background:linear-gradient(90deg,transparent,rgba(255,215,0,0.25),var(--gold-secondary),rgba(255,215,0,0.25),transparent);
+}
+.cosmic-divider-star{
+    position:absolute;top:50%;left:50%;width:8px;height:8px;
+    background:var(--gold);transform:translate(-50%,-50%) rotate(45deg);
+    box-shadow:0 0 16px rgba(255,215,0,0.4),0 0 40px rgba(255,215,0,0.15);
+    animation:starPulse 4s ease-in-out infinite;
+}
+@keyframes nebulaBreath{0%,100%{opacity:0.5;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+@keyframes starPulse{0%,100%{box-shadow:0 0 16px rgba(255,215,0,0.4)}50%{box-shadow:0 0 24px rgba(255,215,0,0.6),0 0 50px rgba(255,215,0,0.15)}}
 
 /* Scroll Reveal */
 .reveal{opacity:0;transform:translateY(36px);transition:opacity 0.8s var(--ease),transform 0.8s var(--ease)}
@@ -227,16 +242,41 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
 .btn-large{padding:18px 52px;font-size:1.02rem}
 
 /* ============================================================
-   HERO
+   HERO — CINEMATIC VIDEO-FIRST REVEAL
    ============================================================ */
 .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;z-index:2;text-align:center}
-.hero-bg{position:absolute;inset:0;z-index:0}
-.hero-bg video{width:100%;height:100%;object-fit:cover;opacity:0.12}
-.hero-bg::after{
-    content:'';position:absolute;inset:0;
-    background:radial-gradient(ellipse at 50% 30%,rgba(255,215,0,0.04) 0%,transparent 60%),
-                linear-gradient(180deg,rgba(6,10,20,0.2) 0%,var(--bg) 100%);
+
+/* Cinematic video layer */
+.hero-cinema{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-cinema video{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease}
+.hero-cinema video.hv-playing{opacity:0.85}
+.hero-cinema video.hv-ambient{opacity:0.18;transition:opacity 2.5s ease}
+.hero-cinema-vignette{
+    position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 50%,transparent 30%,rgba(6,10,20,0.65) 100%),
+                linear-gradient(180deg,rgba(6,10,20,0.1) 0%,transparent 30%,transparent 70%,var(--bg) 100%);
 }
+
+/* Content — hidden until revealed after video */
+.hero-content{
+    position:relative;z-index:2;
+    opacity:0;transform:translateY(24px);
+    transition:opacity 1.4s cubic-bezier(0.16,1,0.3,1),transform 1.4s cubic-bezier(0.16,1,0.3,1);
+}
+.hero-content.hc-revealed{opacity:1;transform:translateY(0)}
+
+/* Staggered blur-to-sharp reveal on each child */
+.hero-reveal-item{
+    opacity:0;transform:translateY(28px);filter:blur(6px);
+    transition:opacity 0.9s ease,transform 0.9s cubic-bezier(0.16,1,0.3,1),filter 0.8s ease;
+}
+.hero-content.hc-revealed .hero-reveal-item{opacity:1;transform:translateY(0);filter:blur(0)}
+.hero-content.hc-revealed .hero-reveal-item:nth-child(1){transition-delay:0s}
+.hero-content.hc-revealed .hero-reveal-item:nth-child(2){transition-delay:0.15s}
+.hero-content.hc-revealed .hero-reveal-item:nth-child(3){transition-delay:0.3s}
+.hero-content.hc-revealed .hero-reveal-item:nth-child(4){transition-delay:0.5s}
+.hero-content.hc-revealed .hero-reveal-item:nth-child(5){transition-delay:0.7s}
+
 .hero-stage{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:28px;padding:120px 24px 40px;max-width:1000px;margin:0 auto}
 .hero-plaques{display:flex;flex-direction:column;gap:14px}
 .hero-plaque{
@@ -257,7 +297,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
     position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
     width:130%;height:130%;
     background:radial-gradient(ellipse,rgba(255,215,0,0.15) 0%,transparent 65%);
-    filter:blur(50px);z-index:-1;animation:glowPulse 5s ease-in-out infinite;
+    filter:blur(50px);z-index:-1;animation:glowPulse 6s ease-in-out infinite;
 }
 .hero-book-shine{
     position:absolute;inset:0;border-radius:8px;pointer-events:none;opacity:0;transition:opacity 0.3s;
@@ -265,7 +305,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
 }
 .hero-book-wrap:hover .hero-book-shine{opacity:1}
 .hero-info{position:relative;z-index:2;max-width:640px;margin:0 auto;padding:0 24px 60px;text-align:center}
-.hero-info h1{margin-bottom:8px}
+.hero-info h1{margin-bottom:8px;text-shadow:0 0 60px rgba(255,215,0,0.15),0 2px 4px rgba(0,0,0,0.4)}
 .hero-author{
     font-family:'Cormorant Garamond',serif;font-size:1rem;
     color:var(--gold-dim);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px;
@@ -283,10 +323,12 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
 .hero-trust .trust-ic{color:var(--green);font-size:0.9rem}
 .scroll-indicator{
     position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
-    display:flex;flex-direction:column;align-items:center;gap:8px;z-index:3;opacity:0.4;
+    display:flex;flex-direction:column;align-items:center;gap:8px;z-index:3;
+    opacity:0;transition:opacity 0.8s ease;
 }
+.scroll-indicator.si-visible{opacity:0.5}
 .scroll-indicator span{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold-dim)}
-.scroll-arrow{width:18px;height:18px;border-right:1.5px solid var(--gold-dim);border-bottom:1.5px solid var(--gold-dim);transform:rotate(45deg)}
+.scroll-arrow{width:18px;height:18px;border-right:1.5px solid var(--gold-dim);border-bottom:1.5px solid var(--gold-dim);transform:rotate(45deg);animation:floatY 3s ease-in-out infinite}
 @media(max-width:768px){
     .hero-stage{flex-direction:column;gap:20px;padding-top:100px}
     .hero-plaques{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:10px}
@@ -664,7 +706,6 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
     backdrop-filter:blur(20px);
 }
 .final-bg{position:absolute;inset:0;z-index:0}
-.final-bg img{width:100%;height:100%;object-fit:cover;opacity:0.2}
 .final-bg::after{
     content:'';position:absolute;inset:0;
     background:radial-gradient(ellipse at 50% 60%,rgba(255,215,0,0.04) 0%,transparent 50%),
@@ -726,13 +767,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
 @media(max-width:768px){.sticky-bar{display:flex}}
 
 /* === ANIMATIONS === */
-.hero-stage{animation:heroStageIn 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s both}
-.hero-info{animation:heroInfoIn 1s cubic-bezier(0.16,1,0.3,1) 0.7s both}
-.scroll-indicator{animation:floatY 3s ease-in-out infinite,fadeInLate 1s ease 1.5s both}
-@keyframes heroStageIn{from{opacity:0;transform:translateY(-40px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes heroInfoIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeInLate{from{opacity:0}to{opacity:0.4}}
-@keyframes glowPulse{0%,100%{opacity:0.8;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}}
+@keyframes glowPulse{0%,100%{opacity:0.6;transform:translate(-50%,-50%) scale(1);filter:blur(50px)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.1);filter:blur(60px)}}
 @keyframes floatY{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
 
 /* ============================================================
@@ -843,12 +878,132 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
     .wp-nav-btn{width:30px;height:30px;font-size:0.85rem}
 }
 
+/* Feature Panel Hover Upgrades */
+.feature-panel{overflow:hidden}
+.feature-panel::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    transform:scaleX(0);transition:transform 0.6s var(--ease);transform-origin:center;
+}
+.feature-panel:hover::before{transform:scaleX(1)}
+.feature-icon{font-size:1.8rem;margin-bottom:10px;display:block;transition:transform 0.4s var(--ease)}
+.feature-panel:hover .feature-icon{transform:translateY(-4px) scale(1.1)}
+.feature-panel::after{
+    content:'';position:absolute;inset:-1px;border-radius:var(--radius-lg);
+    background:linear-gradient(135deg,rgba(255,215,0,0.08),transparent 40%,transparent 60%,rgba(255,215,0,0.04));
+    opacity:0;transition:opacity 0.4s ease;pointer-events:none;z-index:-1;
+}
+.feature-panel:hover::after{opacity:1}
+
+/* Video Showcase Gallery */
+.section-showcase{background:var(--bg-deep)}
+.showcase-player{max-width:860px;margin:0 auto}
+.showcase-video-wrap{
+    position:relative;border-radius:var(--radius-lg);overflow:hidden;
+    aspect-ratio:16/9;margin:0 auto 28px;
+    border:1px solid rgba(255,215,0,0.1);
+    box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 40px rgba(255,215,0,0.03);
+}
+.showcase-video-wrap video{width:100%;height:100%;object-fit:cover}
+.showcase-overlay{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(6,10,20,0.4);transition:opacity 0.4s ease;cursor:pointer;
+}
+.showcase-overlay.so-hidden{opacity:0;pointer-events:none}
+.showcase-play-btn{
+    width:72px;height:72px;border-radius:50%;
+    background:rgba(255,215,0,0.12);border:2px solid var(--gold);
+    color:var(--gold);font-size:1.4rem;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:0.3s var(--ease);backdrop-filter:blur(8px);padding-left:4px;
+}
+.showcase-play-btn:hover{background:rgba(255,215,0,0.2);transform:scale(1.08)}
+.showcase-thumbs{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.showcase-thumb{
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    padding:14px 22px;border-radius:var(--radius-lg);
+    border:1px solid rgba(255,215,0,0.1);background:rgba(15,20,36,0.5);
+    color:var(--text-dim);cursor:pointer;transition:0.3s var(--ease);
+    font-family:'DM Sans',sans-serif;
+}
+.showcase-thumb:hover{border-color:rgba(255,215,0,0.25);color:var(--cream)}
+.showcase-thumb.st-active{border-color:rgba(255,215,0,0.4);background:rgba(255,215,0,0.08);color:var(--gold)}
+.showcase-thumb-icon{font-size:1.4rem}
+.showcase-thumb-label{font-size:0.7rem;letter-spacing:0.04em;font-weight:600}
+@media(max-width:600px){.showcase-thumbs{gap:8px}.showcase-thumb{padding:10px 14px}.showcase-play-btn{width:56px;height:56px;font-size:1.1rem}}
+
+/* 42 Wonders Counter */
+.wonders-counter{position:relative;width:240px;height:240px;margin:0 auto 48px}
+.wonders-counter-ring{position:absolute;inset:0}
+.wonder-dot{
+    position:absolute;width:7px;height:7px;border-radius:50%;
+    background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.12);
+    transition:background 0.3s ease,box-shadow 0.3s ease,transform 0.3s ease;
+}
+.wonder-dot.wd-lit{background:var(--gold);box-shadow:0 0 8px rgba(255,215,0,0.5);transform:scale(1.4);border-color:var(--gold)}
+.wonders-counter-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.wonders-counter-num{
+    display:block;font-family:'Cinzel',serif;font-size:3rem;font-weight:700;
+    color:var(--gold);line-height:1;text-shadow:0 0 24px rgba(255,215,0,0.3);
+}
+.wonders-counter-label{font-size:0.68rem;color:var(--gold-secondary);text-transform:uppercase;letter-spacing:0.12em}
+
+/* Enhanced Card Hovers */
+.proof-card:hover,.whosfor-card:hover,.bonus-panel:hover{
+    box-shadow:0 12px 40px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,215,0,0.08),0 0 30px rgba(255,215,0,0.02);
+}
+
+/* Bonus Section Video Background */
+.section-bonus{position:relative;overflow:hidden}
+.bonus-video-bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+.bonus-video-bg video{width:100%;height:100%;object-fit:cover;opacity:0.06}
+.bonus-video-bg::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,var(--bg) 0%,transparent 20%,transparent 80%,var(--bg) 100%);
+}
+.section-bonus .container{position:relative;z-index:1}
+
+/* Final CTA Video + Floating Particles */
+.final-bg video{width:100%;height:100%;object-fit:cover;opacity:0.18}
+.final-particles{
+    position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden;
+}
+.final-particle{
+    position:absolute;width:3px;height:3px;background:var(--gold);border-radius:50%;opacity:0;
+    animation:floatParticle var(--fp-dur,12s) ease-in-out var(--fp-delay,0s) infinite;
+}
+@keyframes floatParticle{
+    0%{opacity:0;transform:translateY(0) translateX(0)}
+    15%{opacity:0.6}
+    50%{opacity:0.4;transform:translateY(var(--fp-y,-40px)) translateX(var(--fp-x,15px))}
+    85%{opacity:0.5}
+    100%{opacity:0;transform:translateY(0) translateX(0)}
+}
+
+/* Section Atmosphere — Nebula Glows */
+.section-ratings{overflow:hidden}
+.section-ratings::after{
+    content:'';position:absolute;top:50%;left:50%;width:600px;height:600px;
+    background:radial-gradient(circle,rgba(232,67,147,0.03) 0%,rgba(225,112,85,0.02) 30%,transparent 65%);
+    transform:translate(-50%,-50%);pointer-events:none;z-index:0;
+    animation:nebulaBreath 15s ease-in-out infinite;
+}
+.section-ratings .container{position:relative;z-index:1}
+
+/* Typography Polish */
+h2.accent{text-shadow:0 0 50px rgba(255,215,0,0.15),0 2px 4px rgba(0,0,0,0.4)}
+.section-header h2{text-shadow:0 2px 8px rgba(0,0,0,0.3)}
+
 /* === REDUCED MOTION === */
 @media(prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:0.01ms !important;transition-duration:0.01ms !important}
     .reveal,.reveal-left,.reveal-right{opacity:1 !important;transform:none !important}
     .tilt-card,.parallax-img,.btn-magnetic{transform:none !important;will-change:auto !important}
     .scroll-progress{display:none !important}
+    .hero-content,.hero-reveal-item{opacity:1 !important;transform:none !important;filter:none !important}
+    .hero-cinema video{opacity:0.15 !important}
+    .scroll-indicator{opacity:0.4 !important}
+    .cosmic-divider::before{animation:none !important}
+    .cosmic-divider-star{animation:none !important}
 }
     </style>
 </head>
@@ -867,65 +1022,74 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
     <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="nav-cta btn-magnetic" target="_blank" rel="noopener">Buy Now</a>
 </nav>
 
-<!-- ========== HERO ========== -->
+<!-- ========== HERO — CINEMATIC VIDEO-FIRST ========== -->
 <section class="hero" id="hero">
-    <div class="hero-bg">
-        <video autoplay muted loop playsinline>
-            <source src="assets/book-loop.mp4" type="video/mp4">
+    <div class="hero-cinema" id="heroCinema">
+        <video id="heroVideo" muted playsinline preload="auto" poster="assets/book-hero-new.png">
+            <source src="assets/hero-cinematic.mp4" type="video/mp4">
         </video>
+        <div class="hero-cinema-vignette"></div>
     </div>
-    <div class="hero-stage">
-        <div class="hero-plaques">
-            <div class="hero-plaque">
-                <div class="hero-plaque-num" data-count="42">0</div>
-                <div class="hero-plaque-label">Wonders</div>
+    <div class="hero-content" id="heroContent">
+        <div class="hero-stage hero-reveal-item">
+            <div class="hero-plaques">
+                <div class="hero-plaque">
+                    <div class="hero-plaque-num" data-count="42">0</div>
+                    <div class="hero-plaque-label">Wonders</div>
+                </div>
+                <div class="hero-plaque">
+                    <div class="hero-plaque-num" data-count="10" data-prefix="+">0</div>
+                    <div class="hero-plaque-label">Bonus</div>
+                </div>
             </div>
-            <div class="hero-plaque">
-                <div class="hero-plaque-num" data-count="10" data-prefix="+">0</div>
-                <div class="hero-plaque-label">Bonus</div>
+            <div class="hero-book-wrap">
+                <div class="hero-book-glow"></div>
+                <img class="hero-book" src="assets/book-hero-new.png" alt="42 Wonders of Our Night Sky book" fetchpriority="high">
+                <div class="hero-book-shine"></div>
+            </div>
+            <div class="hero-plaques">
+                <div class="hero-plaque">
+                    <div class="hero-plaque-num" data-count="4">0</div>
+                    <div class="hero-plaque-label">Ratings</div>
+                </div>
+                <div class="hero-plaque">
+                    <div class="hero-plaque-num">&#10022;</div>
+                    <div class="hero-plaque-label">Collector's</div>
+                </div>
             </div>
         </div>
-        <div class="hero-book-wrap">
-            <div class="hero-book-glow"></div>
-            <img class="hero-book" src="assets/book-hero-new.png" alt="42 Wonders of Our Night Sky book" fetchpriority="high">
-            <div class="hero-book-shine"></div>
+        <div class="hero-info hero-reveal-item">
+            <span class="hero-author">by Damon Scotting</span>
+            <h1>42 Wonders<br>of Our Night Sky</h1>
+            <p class="hero-subtitle">The night sky's greatest objects &mdash; rated, illustrated, and brought to life</p>
         </div>
-        <div class="hero-plaques">
-            <div class="hero-plaque">
-                <div class="hero-plaque-num" data-count="4">0</div>
-                <div class="hero-plaque-label">Ratings</div>
+        <div class="hero-reveal-item">
+            <div class="hero-price-row">
+                <span class="hero-price">&pound;29.99</span>
+                <span class="hero-format-tag">Collector's Edition</span>
             </div>
-            <div class="hero-plaque">
-                <div class="hero-plaque-num">&#10022;</div>
-                <div class="hero-plaque-label">Collector's</div>
+        </div>
+        <div class="hero-reveal-item">
+            <div class="hero-ctas">
+                <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="btn btn-gold btn-cart btn-magnetic" target="_blank" rel="noopener">Add to Cart</a>
+                <a href="#inside" class="btn btn-outline">Look Inside</a>
+            </div>
+        </div>
+        <div class="hero-reveal-item">
+            <div class="hero-trust">
+                <span><span class="trust-ic">&#10003;</span> Secure Checkout</span>
+                <span><span class="trust-ic">&#10003;</span> Premium Quality Print</span>
+                <span><span class="trust-ic">&#10003;</span> 48hr Dispatch</span>
             </div>
         </div>
     </div>
-    <div class="hero-info">
-        <span class="hero-author">by Damon Scotting</span>
-        <h1>42 Wonders<br>of Our Night Sky</h1>
-        <p class="hero-subtitle">The night sky's greatest objects &mdash; rated, illustrated, and brought to life</p>
-        <div class="hero-price-row">
-            <span class="hero-price">&pound;29.99</span>
-            <span class="hero-format-tag">Collector's Edition</span>
-        </div>
-        <div class="hero-ctas">
-            <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="btn btn-gold btn-cart btn-magnetic" target="_blank" rel="noopener">Add to Cart</a>
-            <a href="#inside" class="btn btn-outline">Look Inside</a>
-        </div>
-        <div class="hero-trust">
-            <span><span class="trust-ic">&#10003;</span> Secure Checkout</span>
-            <span><span class="trust-ic">&#10003;</span> Premium Quality Print</span>
-            <span><span class="trust-ic">&#10003;</span> 48hr Dispatch</span>
-        </div>
-    </div>
-    <div class="scroll-indicator">
-        <span>Scroll</span>
+    <div class="scroll-indicator" id="scrollCue">
+        <span>Explore</span>
         <div class="scroll-arrow"></div>
     </div>
 </section>
 
-<div class="book-divider"><div class="book-divider-line"></div><div class="book-divider-diamond"></div><div class="book-divider-line"></div></div>
+<div class="cosmic-divider"><div class="cosmic-divider-line"></div><div class="cosmic-divider-star"></div></div>
 
 <!-- ========== WHY THIS BOOK IS SPECIAL — 2x2 OBSERVATORY PANELS ========== -->
 <section class="section section-features" id="features">
@@ -935,23 +1099,34 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
             <h2>Not just another space book</h2>
             <p>This isn't a textbook or a photo collection. It's a structured journey through the night sky's greatest objects &mdash; with a scoring system that makes each one unforgettable.</p>
         </div>
+        <div class="wonders-counter reveal" id="wondersCounter">
+            <div class="wonders-counter-ring" id="wondersRing"></div>
+            <div class="wonders-counter-center">
+                <span class="wonders-counter-num" id="wondersNum">0</span>
+                <span class="wonders-counter-label">Wonders</span>
+            </div>
+        </div>
         <div class="features-grid stagger">
             <div class="feature-panel reveal tilt-card">
+                <span class="feature-icon">&#127776;</span>
                 <span class="feature-badge">42 Handpicked Wonders</span>
                 <h3>A Curated Collection</h3>
                 <p>Every object scored across four dimensions: Beauty, Power, Mystery, and Wonder. Compare, debate, and discover your favourites.</p>
             </div>
             <div class="feature-panel reveal tilt-card">
+                <span class="feature-icon">&#10022;</span>
                 <span class="feature-badge">10 Bonus Wonders</span>
                 <h3>Hidden Extras</h3>
                 <p>Beyond the 42 core wonders, unlock 10 additional deep-sky surprises. 52 reasons to look up, all in one book.</p>
             </div>
             <div class="feature-panel reveal tilt-card">
+                <span class="feature-icon">&#128302;</span>
                 <span class="feature-badge">Unique Rating System</span>
                 <h3>Four Dimensions of Awe</h3>
                 <p>Each wonder rated for Beauty, Power, Mystery, and Wonder. A personality profile for every cosmic object.</p>
             </div>
             <div class="feature-panel reveal tilt-card">
+                <span class="feature-icon">&#9670;</span>
                 <span class="feature-badge">Puzzles &amp; More</span>
                 <h3>Interactive Discovery</h3>
                 <p>Puzzles, challenges, games, and stargazing tips woven throughout. A book you interact with, not just read.</p>
@@ -960,7 +1135,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
     </div>
 </section>
 
-<div class="book-divider"><div class="book-divider-line"></div><div class="book-divider-diamond"></div><div class="book-divider-line"></div></div>
+<div class="cosmic-divider"><div class="cosmic-divider-line"></div><div class="cosmic-divider-star"></div></div>
 
 <!-- ========== INSIDE THE BOOK — CAROUSEL + WONDER PROFILE ========== -->
 <section class="section section-inside" id="inside">
@@ -1135,11 +1310,42 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
 
 <!-- ========== VIDEO BAND ========== -->
 <section class="video-band">
-    <video autoplay muted loop playsinline>
-        <source src="assets/cosmic-flow.mp4" type="video/mp4">
-    </video>
+    <video muted loop playsinline preload="none" data-src="assets/cosmic-flow-new.mp4"></video>
     <div class="video-band-text">
         <h2 class="reveal">Every object in the night sky has a story.<br>This book helps you tell it.</h2>
+    </div>
+</section>
+
+<!-- ========== VIDEO SHOWCASE GALLERY ========== -->
+<section class="section section-showcase" id="showcase">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="eyebrow">See It In Motion</span>
+            <h2>The Book, Brought to Life</h2>
+            <p>Watch the premium quality, rich layouts, and collector's-grade print come alive.</p>
+        </div>
+        <div class="showcase-player reveal">
+            <div class="showcase-video-wrap">
+                <video id="showcaseVideo" muted playsinline loop preload="none" data-src="assets/book-advert-1.mp4"></video>
+                <div class="showcase-overlay" id="showcaseOverlay">
+                    <button class="showcase-play-btn" aria-label="Play video">&#9654;</button>
+                </div>
+            </div>
+            <div class="showcase-thumbs" id="showcaseThumbs">
+                <button class="showcase-thumb st-active" data-video="assets/book-advert-1.mp4">
+                    <span class="showcase-thumb-icon">&#128214;</span>
+                    <span class="showcase-thumb-label">The Book</span>
+                </button>
+                <button class="showcase-thumb" data-video="assets/book-advert-2.mp4">
+                    <span class="showcase-thumb-icon">&#10022;</span>
+                    <span class="showcase-thumb-label">Premium Detail</span>
+                </button>
+                <button class="showcase-thumb" data-video="assets/book-cozy-tea.mp4">
+                    <span class="showcase-thumb-icon">&#9749;</span>
+                    <span class="showcase-thumb-label">Evening Reading</span>
+                </button>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -1236,6 +1442,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
 
 <!-- ========== BONUS DISCOVERIES ========== -->
 <section class="section section-bonus" id="bonus">
+    <div class="bonus-video-bg"><video muted loop playsinline preload="none" data-src="assets/bonus-wonders.mp4"></video></div>
     <div class="container">
         <div class="section-header reveal">
             <span class="eyebrow">Beyond the 42</span>
@@ -1271,7 +1478,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
     </div>
 </section>
 
-<div class="book-divider"><div class="book-divider-line"></div><div class="book-divider-diamond"></div><div class="book-divider-line"></div></div>
+<div class="cosmic-divider"><div class="cosmic-divider-line"></div><div class="cosmic-divider-star"></div></div>
 
 <!-- ========== SOCIAL PROOF ========== -->
 <section class="section section-proof" id="proof">
@@ -1438,8 +1645,9 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
 <!-- ========== FINAL CTA ========== -->
 <section class="section section-final" id="final">
     <div class="final-bg">
-        <img src="assets/hero-marketing.png" alt="" loading="lazy">
+        <video muted loop playsinline preload="none" data-src="assets/book-pan-out.mp4" poster="assets/hero-marketing.png"></video>
     </div>
+    <div class="final-particles" id="finalParticles"></div>
     <div class="container">
         <div class="final-wrap reveal">
             <span class="eyebrow">Start Your Journey</span>
@@ -1930,26 +2138,185 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
     });
 
     /* ============================
-       HERO PLAQUE COUNT-UP
+       HERO PLAQUE COUNT-UP (triggered by cinematic reveal)
        ============================ */
-    var heroPlaqueCounts = document.querySelectorAll('.hero-plaque-num[data-count]');
-    if (heroPlaqueCounts.length && !prefersReducedMotion) {
+    function triggerHeroPlaqueCounts() {
+        var heroPlaqueCounts = document.querySelectorAll('.hero-plaque-num[data-count]');
+        if (!heroPlaqueCounts.length || prefersReducedMotion) return;
+        heroPlaqueCounts.forEach(function(el) {
+            var target = parseInt(el.dataset.count);
+            var prefix = el.dataset.prefix || '';
+            var startTime = null;
+            var duration = 800;
+            function step(ts) {
+                if (!startTime) startTime = ts;
+                var p = Math.min((ts - startTime) / duration, 1);
+                var ep = 1 - (1 - p) * (1 - p);
+                el.textContent = prefix + Math.round(ep * target);
+                if (p < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        });
+    }
+
+    /* ============================
+       CINEMATIC HERO SEQUENCE
+       ============================ */
+    var heroVideo = document.getElementById('heroVideo');
+    var heroContent = document.getElementById('heroContent');
+    var scrollCue = document.getElementById('scrollCue');
+    var heroRevealed = false;
+
+    function revealHeroContent() {
+        if (heroRevealed) return;
+        heroRevealed = true;
+        if (heroVideo) {
+            heroVideo.classList.remove('hv-playing');
+            heroVideo.classList.add('hv-ambient');
+            heroVideo.loop = true;
+            heroVideo.play().catch(function(){});
+        }
         setTimeout(function() {
-            heroPlaqueCounts.forEach(function(el) {
-                var target = parseInt(el.dataset.count);
-                var prefix = el.dataset.prefix || '';
-                var startTime = null;
-                var duration = 800;
-                function step(ts) {
-                    if (!startTime) startTime = ts;
-                    var p = Math.min((ts - startTime) / duration, 1);
-                    var ep = 1 - (1 - p) * (1 - p);
-                    el.textContent = prefix + Math.round(ep * target);
-                    if (p < 1) requestAnimationFrame(step);
+            if (heroContent) heroContent.classList.add('hc-revealed');
+            setTimeout(triggerHeroPlaqueCounts, 400);
+        }, 600);
+        setTimeout(function() {
+            if (scrollCue) scrollCue.classList.add('si-visible');
+        }, 2800);
+    }
+
+    if (heroVideo && !prefersReducedMotion && !isMobile) {
+        heroVideo.addEventListener('canplay', function() {
+            heroVideo.classList.add('hv-playing');
+            heroVideo.play().catch(function() { revealHeroContent(); });
+        }, { once: true });
+        heroVideo.addEventListener('ended', revealHeroContent, { once: true });
+        setTimeout(revealHeroContent, 8000);
+    } else {
+        /* Mobile or reduced motion — skip cinematic, show immediately */
+        if (heroVideo) {
+            heroVideo.classList.add('hv-ambient');
+            heroVideo.loop = true;
+            heroVideo.muted = true;
+            heroVideo.play().catch(function(){});
+        }
+        if (heroContent) heroContent.classList.add('hc-revealed');
+        if (scrollCue) scrollCue.classList.add('si-visible');
+        setTimeout(triggerHeroPlaqueCounts, 600);
+    }
+
+    /* ============================
+       LAZY VIDEO LOADER
+       ============================ */
+    var lazyVideos = document.querySelectorAll('video[data-src]');
+    if (lazyVideos.length) {
+        var videoObs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) {
+                    var video = e.target;
+                    var src = document.createElement('source');
+                    src.src = video.dataset.src;
+                    src.type = 'video/mp4';
+                    video.appendChild(src);
+                    video.load();
+                    video.play().catch(function(){});
+                    videoObs.unobserve(video);
                 }
-                requestAnimationFrame(step);
             });
-        }, 1600);
+        }, { rootMargin: '200px 0px' });
+        lazyVideos.forEach(function(v) { videoObs.observe(v); });
+    }
+
+    /* ============================
+       VIDEO SHOWCASE GALLERY
+       ============================ */
+    var showcaseVideo = document.getElementById('showcaseVideo');
+    var showcaseOverlay = document.getElementById('showcaseOverlay');
+    var showcaseThumbs = document.querySelectorAll('.showcase-thumb');
+
+    function playShowcaseVideo(videoSrc) {
+        if (!showcaseVideo) return;
+        showcaseVideo.innerHTML = '';
+        var src = document.createElement('source');
+        src.src = videoSrc;
+        src.type = 'video/mp4';
+        showcaseVideo.appendChild(src);
+        showcaseVideo.load();
+        showcaseVideo.play().catch(function(){});
+        if (showcaseOverlay) showcaseOverlay.classList.add('so-hidden');
+    }
+
+    if (showcaseVideo && showcaseOverlay) {
+        showcaseOverlay.addEventListener('click', function() {
+            var activeSrc = showcaseVideo.dataset.src;
+            playShowcaseVideo(activeSrc);
+        });
+    }
+    showcaseThumbs.forEach(function(thumb) {
+        thumb.addEventListener('click', function() {
+            var videoSrc = thumb.dataset.video;
+            showcaseThumbs.forEach(function(t) { t.classList.remove('st-active'); });
+            thumb.classList.add('st-active');
+            playShowcaseVideo(videoSrc);
+        });
+    });
+
+    /* ============================
+       42 WONDERS COUNTER
+       ============================ */
+    var wondersRing = document.getElementById('wondersRing');
+    var wondersNum = document.getElementById('wondersNum');
+    if (wondersRing && wondersNum) {
+        var TOTAL_WONDERS = 42;
+        var ringRadius = 100;
+        for (var wi = 0; wi < TOTAL_WONDERS; wi++) {
+            var dot = document.createElement('div');
+            dot.className = 'wonder-dot';
+            var angle = (Math.PI * 2 / TOTAL_WONDERS) * wi - Math.PI / 2;
+            dot.style.left = (120 + Math.cos(angle) * ringRadius - 3.5) + 'px';
+            dot.style.top = (120 + Math.sin(angle) * ringRadius - 3.5) + 'px';
+            wondersRing.appendChild(dot);
+        }
+        var wonderDots = wondersRing.querySelectorAll('.wonder-dot');
+        var counterObs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) {
+                    var count = 0;
+                    var interval = setInterval(function() {
+                        if (count < TOTAL_WONDERS) {
+                            wonderDots[count].classList.add('wd-lit');
+                            count++;
+                            wondersNum.textContent = count;
+                        } else {
+                            clearInterval(interval);
+                        }
+                    }, 50);
+                    counterObs.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        counterObs.observe(document.getElementById('wondersCounter'));
+    }
+
+    /* ============================
+       FINAL CTA FLOATING PARTICLES
+       ============================ */
+    var finalParticles = document.getElementById('finalParticles');
+    if (finalParticles) {
+        for (var fp = 0; fp < 12; fp++) {
+            var particle = document.createElement('div');
+            particle.className = 'final-particle';
+            particle.style.left = (5 + Math.random() * 90) + '%';
+            particle.style.top = (10 + Math.random() * 80) + '%';
+            particle.style.setProperty('--fp-dur', (8 + Math.random() * 8) + 's');
+            particle.style.setProperty('--fp-delay', (Math.random() * 6) + 's');
+            particle.style.setProperty('--fp-y', (-20 - Math.random() * 40) + 'px');
+            particle.style.setProperty('--fp-x', (-15 + Math.random() * 30) + 'px');
+            var sz = 2 + Math.random() * 3;
+            particle.style.width = sz + 'px';
+            particle.style.height = sz + 'px';
+            finalParticles.appendChild(particle);
+        }
     }
 
     /* ============================
