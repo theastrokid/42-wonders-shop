@@ -279,33 +279,97 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
 @media (max-width: 520px) { .diff-grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; } }
 
 /* ============================================================
-   INSIDE THE BOOK — GALLERY WITH LIGHTBOX
+   INSIDE THE BOOK — AUTO-PLAYING CAROUSEL
    ============================================================ */
 .section-inside { background: var(--bg-deep); }
-.inside-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-.gallery-card {
-    position: relative; border-radius: var(--radius-lg); overflow: hidden;
-    aspect-ratio: 3/4; cursor: pointer;
+
+/* Carousel container */
+.carousel-wrap { position: relative; max-width: 100%; overflow: hidden; border-radius: var(--radius-lg); }
+.carousel-track {
+    display: flex; transition: transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
 }
-.gallery-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
-.gallery-card:hover img { transform: scale(1.05); }
-.gallery-overlay {
+.carousel-slide {
+    min-width: 100%; position: relative; cursor: pointer;
+}
+/* Show 3 slides on desktop */
+@media (min-width: 769px) {
+    .carousel-track { gap: 20px; }
+    .carousel-slide { min-width: calc(33.333% - 14px); }
+}
+.carousel-slide-inner {
+    position: relative; border-radius: var(--radius-lg); overflow: hidden;
+    aspect-ratio: 3/4;
+}
+.carousel-slide-inner img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s var(--ease);
+}
+.carousel-slide:hover .carousel-slide-inner img { transform: scale(1.05); }
+.carousel-overlay {
     position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px;
     background: linear-gradient(0deg, rgba(6,10,20,0.9) 0%, transparent 55%); transition: 0.4s var(--ease);
 }
-.gallery-card:hover .gallery-overlay { background: linear-gradient(0deg, rgba(6,10,20,0.95) 0%, rgba(6,10,20,0.2) 55%); }
-.gallery-overlay h3 { font-size: 1.05rem; margin-bottom: 4px; }
-.gallery-overlay p { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
-.gallery-zoom-hint {
+.carousel-slide:hover .carousel-overlay { background: linear-gradient(0deg, rgba(6,10,20,0.95) 0%, rgba(6,10,20,0.2) 55%); }
+.carousel-overlay h3 { font-size: 1.05rem; margin-bottom: 4px; }
+.carousel-overlay p { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+.carousel-zoom-hint {
     position: absolute; top: 16px; right: 16px; width: 36px; height: 36px;
     background: rgba(10,14,26,0.7); border: 1px solid rgba(201,168,76,0.15);
     border-radius: 8px; display: flex; align-items: center; justify-content: center;
     color: var(--gold); font-size: 0.9rem; opacity: 0; transition: 0.3s var(--ease);
     backdrop-filter: blur(8px);
 }
-.gallery-card:hover .gallery-zoom-hint { opacity: 1; }
-@media (max-width: 768px) { .inside-gallery { grid-template-columns: 1fr 1fr; gap: 14px; } }
-@media (max-width: 480px) { .inside-gallery { grid-template-columns: 1fr; max-width: 380px; margin: 0 auto; } }
+.carousel-slide:hover .carousel-zoom-hint { opacity: 1; }
+
+/* Carousel navigation arrows */
+.carousel-nav-btn {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
+    width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(201,168,76,0.2);
+    background: rgba(10,14,26,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 1.2rem; cursor: pointer;
+    transition: 0.3s var(--ease); opacity: 0;
+}
+.carousel-wrap:hover .carousel-nav-btn { opacity: 1; }
+.carousel-nav-btn:hover { background: rgba(201,168,76,0.15); border-color: rgba(201,168,76,0.4); }
+.carousel-prev { left: 16px; }
+.carousel-next { right: 16px; }
+
+/* Carousel dot indicators */
+.carousel-dots {
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; margin-top: 28px;
+}
+.carousel-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.2);
+    cursor: pointer; transition: 0.4s var(--ease); padding: 0;
+}
+.carousel-dot.active {
+    background: var(--gold); border-color: var(--gold);
+    width: 28px; border-radius: 100px;
+}
+.carousel-dot:hover:not(.active) { background: rgba(201,168,76,0.3); }
+
+/* Carousel progress bar */
+.carousel-progress {
+    width: 100%; height: 2px; background: rgba(201,168,76,0.08);
+    margin-top: 16px; border-radius: 2px; overflow: hidden;
+}
+.carousel-progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    width: 0%; transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+    .carousel-slide { min-width: 100%; }
+    .carousel-track { gap: 0; }
+    .carousel-nav-btn { opacity: 1; width: 40px; height: 40px; }
+    .carousel-prev { left: 10px; }
+    .carousel-next { right: 10px; }
+}
 
 /* Lightbox */
 .lightbox {
@@ -482,6 +546,32 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
     font-style: italic; opacity: 0.5;
 }
 @media (max-width: 768px) { .proof-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; } }
+
+/* Featured In Logo Strip */
+.featured-in { margin-top: 72px; text-align: center; }
+.featured-in-label {
+    font-family: 'Cormorant Garamond', serif; font-size: 0.82rem;
+    color: var(--text-dim); letter-spacing: 0.18em; text-transform: uppercase;
+    margin-bottom: 28px; display: block; opacity: 0.6;
+}
+.featured-in-logos {
+    display: flex; align-items: center; justify-content: center;
+    gap: 48px; flex-wrap: wrap;
+}
+.featured-in-logo {
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 600;
+    color: var(--text-dim); opacity: 0.35; transition: opacity 0.4s var(--ease);
+    letter-spacing: 0.04em; white-space: nowrap;
+}
+.featured-in-logo:hover { opacity: 0.6; }
+.featured-in-logo .fi-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; color: var(--gold-dim);
+}
+@media (max-width: 768px) { .featured-in-logos { gap: 28px; } .featured-in-logo { font-size: 0.78rem; } }
 
 /* ============================================================
    WHO IT'S FOR — USE-CASE CARDS
@@ -685,8 +775,8 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
         <span class="nav-title">42 Wonders</span>
         <span class="nav-price"><strong>&pound;29.99</strong> &mdash; Collector's Edition</span>
     </div>
-    <!-- SQUARESPACE: Replace with your native Add-to-Cart button -->
-    <a href="#final" class="nav-cta">Buy Now</a>
+    <!-- CHECKOUT: Replace URL with your Stripe Payment Link or Squarespace product URL -->
+    <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="nav-cta" target="_blank" rel="noopener">Buy Now</a>
 </nav>
 
 <!-- ========== HERO ========== -->
@@ -717,8 +807,8 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
                     <span class="hero-format-tag">Collector's Edition</span>
                 </div>
                 <div class="hero-ctas">
-                    <!-- SQUARESPACE: Replace href with your product page URL or Add-to-Cart link -->
-                    <a href="#final" class="btn btn-gold btn-cart">Add to Cart</a>
+                    <!-- CHECKOUT: Replace URL with your Stripe Payment Link or Squarespace product URL -->
+                    <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="btn btn-gold btn-cart" target="_blank" rel="noopener">Add to Cart</a>
                     <a href="#inside" class="btn btn-outline">Look Inside</a>
                 </div>
                 <div class="hero-trust">
@@ -753,8 +843,8 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
             </div>
             <div class="diff-card reveal">
                 <div class="diff-icon">&#9733;</div>
-                <h3>42 + 10 Bonus Wonders</h3>
-                <p>42 handpicked deep-sky objects plus 10 bonus wonders. Each chosen for its ability to inspire genuine awe.</p>
+                <h3>Includes 10 Bonus Wonders</h3>
+                <p>Beyond the 42 core wonders, unlock 10 additional deep-sky surprises. 52 reasons to look up, all in one book.</p>
             </div>
             <div class="diff-card reveal">
                 <div class="diff-icon">&#9670;</div>
@@ -780,55 +870,74 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
             <h2>Every Page, an Experience</h2>
             <p>Rich layouts, vivid imagery, and structured profiles that make every wonder feel like a discovery. Click any image to enlarge.</p>
         </div>
-        <div class="inside-gallery stagger">
-            <div class="gallery-card reveal" data-lightbox="0">
-                <img src="assets/spread-dark.png" alt="Full-page wonder profile spread" loading="lazy">
-                <div class="gallery-zoom-hint">&#128269;</div>
-                <div class="gallery-overlay">
-                    <h3>Wonder Profiles</h3>
-                    <p>Each object gets a richly illustrated spread with ratings at a glance.</p>
+        <div class="carousel-wrap reveal" id="carousel">
+            <div class="carousel-track" id="carouselTrack">
+                <div class="carousel-slide" data-lightbox="0">
+                    <div class="carousel-slide-inner">
+                        <img src="assets/spread-dark.png" alt="Full-page wonder profile spread" loading="lazy">
+                        <div class="carousel-zoom-hint">&#128269;</div>
+                        <div class="carousel-overlay">
+                            <h3>Wonder Profiles</h3>
+                            <p>Each object gets a richly illustrated spread with ratings at a glance.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-slide" data-lightbox="1">
+                    <div class="carousel-slide-inner">
+                        <img src="assets/spread-hands.png" alt="Reader exploring the book" loading="lazy">
+                        <div class="carousel-zoom-hint">&#128269;</div>
+                        <div class="carousel-overlay">
+                            <h3>Made to Explore</h3>
+                            <p>Structured layouts that invite you to compare ratings and uncover details.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-slide" data-lightbox="2">
+                    <div class="carousel-slide-inner">
+                        <img src="assets/spread-instruments.png" alt="Astronomy instruments alongside the book" loading="lazy">
+                        <div class="carousel-zoom-hint">&#128269;</div>
+                        <div class="carousel-overlay">
+                            <h3>A Collector's Piece</h3>
+                            <p>Premium print quality designed to display and revisit for years.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-slide" data-lightbox="3">
+                    <div class="carousel-slide-inner">
+                        <img src="assets/book-telescope.png" alt="Book with telescope" loading="lazy">
+                        <div class="carousel-zoom-hint">&#128269;</div>
+                        <div class="carousel-overlay">
+                            <h3>Your Stargazing Companion</h3>
+                            <p>Take it to the eyepiece. Find the wonders you've been reading about.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-slide" data-lightbox="4">
+                    <div class="carousel-slide-inner">
+                        <img src="assets/reading-window.png" alt="Reading by the window" loading="lazy">
+                        <div class="carousel-zoom-hint">&#128269;</div>
+                        <div class="carousel-overlay">
+                            <h3>Evening Reading</h3>
+                            <p>A book that feels as good to hold as it does to look at.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-slide" data-lightbox="5">
+                    <div class="carousel-slide-inner">
+                        <img src="assets/book-desk-night.png" alt="Book on desk by starry window" loading="lazy">
+                        <div class="carousel-zoom-hint">&#128269;</div>
+                        <div class="carousel-overlay">
+                            <h3>Night After Night</h3>
+                            <p>Not a one-read book. You'll keep coming back to it.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="gallery-card reveal" data-lightbox="1">
-                <img src="assets/spread-hands.png" alt="Reader exploring the book" loading="lazy">
-                <div class="gallery-zoom-hint">&#128269;</div>
-                <div class="gallery-overlay">
-                    <h3>Made to Explore</h3>
-                    <p>Structured layouts that invite you to compare ratings and uncover details.</p>
-                </div>
-            </div>
-            <div class="gallery-card reveal" data-lightbox="2">
-                <img src="assets/spread-instruments.png" alt="Astronomy instruments alongside the book" loading="lazy">
-                <div class="gallery-zoom-hint">&#128269;</div>
-                <div class="gallery-overlay">
-                    <h3>A Collector's Piece</h3>
-                    <p>Premium print quality designed to display and revisit for years.</p>
-                </div>
-            </div>
-            <div class="gallery-card reveal" data-lightbox="3">
-                <img src="assets/book-telescope.png" alt="Book with telescope" loading="lazy">
-                <div class="gallery-zoom-hint">&#128269;</div>
-                <div class="gallery-overlay">
-                    <h3>Your Stargazing Companion</h3>
-                    <p>Take it to the eyepiece. Find the wonders you've been reading about.</p>
-                </div>
-            </div>
-            <div class="gallery-card reveal" data-lightbox="4">
-                <img src="assets/reading-window.png" alt="Reading by the window" loading="lazy">
-                <div class="gallery-zoom-hint">&#128269;</div>
-                <div class="gallery-overlay">
-                    <h3>Evening Reading</h3>
-                    <p>A book that feels as good to hold as it does to look at.</p>
-                </div>
-            </div>
-            <div class="gallery-card reveal" data-lightbox="5">
-                <img src="assets/book-desk-night.png" alt="Book on desk by starry window" loading="lazy">
-                <div class="gallery-zoom-hint">&#128269;</div>
-                <div class="gallery-overlay">
-                    <h3>Night After Night</h3>
-                    <p>Not a one-read book. You'll keep coming back to it.</p>
-                </div>
-            </div>
+            <!-- Carousel Controls -->
+            <button class="carousel-nav-btn carousel-prev" aria-label="Previous slide">&#10094;</button>
+            <button class="carousel-nav-btn carousel-next" aria-label="Next slide">&#10095;</button>
+            <div class="carousel-dots" id="carouselDots"></div>
+            <div class="carousel-progress"><div class="carousel-progress-fill" id="carouselProgress"></div></div>
         </div>
     </div>
 </section>
@@ -995,6 +1104,30 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
             </div>
         </div>
         <p class="proof-placeholder-note reveal">(Placeholder reviews &mdash; replace with real testimonials when available)</p>
+
+        <!-- Featured In Logo Strip -->
+        <div class="featured-in reveal">
+            <span class="featured-in-label">As Featured In</span>
+            <div class="featured-in-logos">
+                <div class="featured-in-logo">
+                    <span class="fi-icon">&#9733;</span>
+                    Sky at Night
+                </div>
+                <div class="featured-in-logo">
+                    <span class="fi-icon">&#9670;</span>
+                    Astronomy Now
+                </div>
+                <div class="featured-in-logo">
+                    <span class="fi-icon">&#10022;</span>
+                    All About Space
+                </div>
+                <div class="featured-in-logo">
+                    <span class="fi-icon">&#127776;</span>
+                    The Dark Sky Diary
+                </div>
+            </div>
+            <p class="proof-placeholder-note" style="margin-top: 16px;">(Placeholder logos &mdash; replace with real publication logos)</p>
+        </div>
     </div>
 </section>
 
@@ -1153,8 +1286,8 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
            /shop/p/your-product-slug
         ════════════════════════════════════════════════════════
         -->
-        <!-- SQUARESPACE: Replace href with your product page URL or Add-to-Cart link -->
-        <a href="#" class="btn btn-gold btn-large btn-cart">Add to Cart</a>
+        <!-- CHECKOUT: Replace URL with your Stripe Payment Link or Squarespace product URL -->
+        <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="btn btn-gold btn-large btn-cart" target="_blank" rel="noopener">Add to Cart</a>
         <div class="final-reassurance">
             <span>&#10003; Secure Checkout</span>
             <span>&#10003; 48hr Dispatch</span>
@@ -1198,8 +1331,8 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
         <span class="sticky-bar-title">42 Wonders</span>
         <span class="sticky-bar-price">&pound;29.99</span>
     </div>
-    <!-- SQUARESPACE: Replace with native Add-to-Cart button -->
-    <a href="#final" class="btn btn-gold">Buy Now</a>
+    <!-- CHECKOUT: Replace URL with your Stripe Payment Link or Squarespace product URL -->
+    <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="btn btn-gold" target="_blank" rel="noopener">Buy Now</a>
 </div>
 
 <!-- ================================================================
@@ -1415,7 +1548,121 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
     }
 
     /* ============================
-       LIGHTBOX
+       CAROUSEL — AUTO-PLAY + SWIPE
+       ============================ */
+    const carouselWrap = document.getElementById('carousel');
+    const carouselTrack = document.getElementById('carouselTrack');
+    const carouselSlides = carouselTrack ? Array.from(carouselTrack.children) : [];
+    const carouselDotsWrap = document.getElementById('carouselDots');
+    const carouselProgressFill = document.getElementById('carouselProgress');
+    const totalSlides = carouselSlides.length;
+    let carouselIdx = 0;
+    let slidesPerView = window.innerWidth >= 769 ? 3 : 1;
+    let maxIdx = Math.max(0, totalSlides - slidesPerView);
+    let autoPlayTimer = null;
+    const AUTO_PLAY_INTERVAL = 4500;
+
+    // Build dots
+    function buildDots() {
+        if (!carouselDotsWrap) return;
+        carouselDotsWrap.innerHTML = '';
+        const dotCount = maxIdx + 1;
+        for (let i = 0; i < dotCount; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+            dot.addEventListener('click', () => goToSlide(i));
+            carouselDotsWrap.appendChild(dot);
+        }
+    }
+
+    function updateCarousel() {
+        if (!carouselTrack) return;
+        const gap = slidesPerView > 1 ? 20 : 0;
+        const slideW = (carouselWrap.offsetWidth - gap * (slidesPerView - 1)) / slidesPerView;
+        const offset = carouselIdx * (slideW + gap);
+        carouselTrack.style.transform = 'translateX(-' + offset + 'px)';
+
+        // Update dots
+        if (carouselDotsWrap) {
+            carouselDotsWrap.querySelectorAll('.carousel-dot').forEach((d, i) => {
+                d.classList.toggle('active', i === carouselIdx);
+            });
+        }
+        // Update progress
+        if (carouselProgressFill) {
+            const pct = maxIdx > 0 ? ((carouselIdx + 1) / (maxIdx + 1)) * 100 : 100;
+            carouselProgressFill.style.width = pct + '%';
+        }
+    }
+
+    function goToSlide(idx) {
+        carouselIdx = Math.max(0, Math.min(idx, maxIdx));
+        updateCarousel();
+        resetAutoPlay();
+    }
+
+    function nextSlide() { goToSlide(carouselIdx >= maxIdx ? 0 : carouselIdx + 1); }
+    function prevSlide() { goToSlide(carouselIdx <= 0 ? maxIdx : carouselIdx - 1); }
+
+    // Auto-play
+    function startAutoPlay() {
+        stopAutoPlay();
+        autoPlayTimer = setInterval(nextSlide, AUTO_PLAY_INTERVAL);
+    }
+    function stopAutoPlay() { if (autoPlayTimer) { clearInterval(autoPlayTimer); autoPlayTimer = null; } }
+    function resetAutoPlay() { stopAutoPlay(); startAutoPlay(); }
+
+    // Carousel nav buttons
+    if (carouselWrap) {
+        const prevBtn = carouselWrap.querySelector('.carousel-prev');
+        const nextBtn = carouselWrap.querySelector('.carousel-next');
+        if (prevBtn) prevBtn.addEventListener('click', e => { e.stopPropagation(); prevSlide(); });
+        if (nextBtn) nextBtn.addEventListener('click', e => { e.stopPropagation(); nextSlide(); });
+
+        // Pause on hover
+        carouselWrap.addEventListener('mouseenter', stopAutoPlay);
+        carouselWrap.addEventListener('mouseleave', startAutoPlay);
+
+        // Touch / swipe support
+        let touchStartX = 0, touchEndX = 0, isSwiping = false;
+        carouselWrap.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+            isSwiping = true;
+            stopAutoPlay();
+        }, { passive: true });
+        carouselWrap.addEventListener('touchmove', e => {
+            touchEndX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        carouselWrap.addEventListener('touchend', () => {
+            if (!isSwiping) return;
+            isSwiping = false;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) nextSlide(); else prevSlide();
+            }
+            startAutoPlay();
+        });
+
+        // Responsive recalc
+        window.addEventListener('resize', () => {
+            const newSPV = window.innerWidth >= 769 ? 3 : 1;
+            if (newSPV !== slidesPerView) {
+                slidesPerView = newSPV;
+                maxIdx = Math.max(0, totalSlides - slidesPerView);
+                carouselIdx = Math.min(carouselIdx, maxIdx);
+                buildDots();
+            }
+            updateCarousel();
+        });
+
+        buildDots();
+        updateCarousel();
+        startAutoPlay();
+    }
+
+    /* ============================
+       LIGHTBOX (works with carousel)
        ============================ */
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
@@ -1423,11 +1670,13 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
     const galleryImages = [];
     let currentLightbox = 0;
 
-    document.querySelectorAll('.gallery-card[data-lightbox]').forEach(card => {
-        const img = card.querySelector('img');
+    document.querySelectorAll('.carousel-slide[data-lightbox]').forEach(slide => {
+        const img = slide.querySelector('img');
         galleryImages.push(img.src);
-        card.addEventListener('click', () => {
-            currentLightbox = parseInt(card.dataset.lightbox);
+        slide.addEventListener('click', e => {
+            // Don't open lightbox if nav button was clicked
+            if (e.target.closest('.carousel-nav-btn')) return;
+            currentLightbox = parseInt(slide.dataset.lightbox);
             openLightbox(currentLightbox);
         });
     });
@@ -1437,10 +1686,12 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
         lightboxCounter.textContent = (idx + 1) + ' / ' + galleryImages.length;
         lightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
+        stopAutoPlay();
     }
     function closeLightbox() {
         lightbox.classList.remove('active');
         document.body.style.overflow = '';
+        startAutoPlay();
     }
     lightbox.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
     lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
@@ -1493,6 +1744,7 @@ h3 { font-size: clamp(1.1rem, 1.6vw, 1.4rem); font-weight: 600; }
        SMOOTH SCROLL
        ============================ */
     document.querySelectorAll('a[href^="#"]').forEach(a => {
+        if (a.getAttribute('href') === '#') return; // skip placeholder/external links
         a.addEventListener('click', e => {
             const t = document.querySelector(a.getAttribute('href'));
             if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
