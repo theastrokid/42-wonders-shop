@@ -670,15 +670,126 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
 @keyframes glowPulse{0%,100%{opacity:0.8;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}}
 @keyframes floatY{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
 
+/* ============================================================
+   INTERACTIVE ENHANCEMENTS
+   ============================================================ */
+
+/* Scroll Progress */
+.scroll-progress{
+    position:fixed;top:0;left:0;right:0;height:3px;z-index:1001;
+    background:rgba(255,215,0,0.06);pointer-events:none;
+    opacity:0;transition:opacity 0.4s ease;
+}
+.scroll-progress.visible{opacity:1}
+.scroll-progress-fill{
+    height:100%;width:0%;
+    background:linear-gradient(90deg,var(--gold-dim),var(--gold),var(--gold-light));
+    transition:width 0.08s linear;border-radius:0 2px 2px 0;
+}
+.scroll-progress-marker{
+    position:absolute;top:50%;width:5px;height:5px;
+    background:var(--gold-dim);border-radius:50%;transform:translate(-50%,-50%);
+    opacity:0.3;transition:opacity 0.3s ease,background 0.3s ease;
+}
+.scroll-progress-marker.passed{opacity:1;background:var(--gold)}
+
+/* Tilt Cards */
+.tilt-card{transform-style:preserve-3d;will-change:transform;transition:transform 0.25s var(--ease)}
+
+/* Parallax Images */
+.parallax-img{transition:transform 0.4s ease-out;will-change:transform}
+
+/* Magnetic Buttons */
+.btn-magnetic{transition:transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94)}
+
+/* Interactive Discover Columns */
+.discover-col{cursor:pointer;overflow:hidden}
+.discover-col-extra{
+    max-height:0;overflow:hidden;opacity:0;
+    transition:max-height 0.5s var(--ease),opacity 0.4s ease 0.1s,margin 0.4s ease;
+    font-size:0.85rem;color:var(--text);line-height:1.7;margin-top:0;
+}
+.discover-col.dc-active{
+    background:rgba(15,20,36,0.85);
+    border-color:rgba(255,215,0,0.15);
+    box-shadow:0 8px 32px rgba(0,0,0,0.2),0 0 20px rgba(255,215,0,0.03);
+}
+.discover-col.dc-active .discover-col-extra{max-height:220px;opacity:1;margin-top:14px}
+.discover-col.dc-active .discover-col-badge{color:var(--gold)}
+.discover-col.dc-active .discover-col-icon{transform:scale(1.15);transition:transform 0.4s var(--ease)}
+.discover-col:not(.dc-active){opacity:0.6;transition:opacity 0.4s ease,background 0.4s var(--ease),box-shadow 0.4s ease}
+.discover-col:not(.dc-active):hover{opacity:0.85}
+
+/* Bonus Panel Expand */
+.bonus-expand{max-height:0;overflow:hidden;transition:max-height 0.4s var(--ease)}
+.bonus-expand-inner{padding-top:14px;border-top:1px solid rgba(255,215,0,0.08);margin-top:14px}
+.bonus-expand-inner p{font-size:0.85rem;color:var(--text);line-height:1.7}
+.bonus-toggle{
+    display:inline-flex;align-items:center;gap:6px;margin-top:14px;
+    background:none;border:none;color:var(--gold-secondary);font-size:0.78rem;
+    font-weight:600;letter-spacing:0.04em;cursor:pointer;
+    transition:color 0.3s ease;font-family:'DM Sans',sans-serif;padding:0;
+}
+.bonus-toggle:hover{color:var(--gold)}
+.bonus-toggle-icon{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:18px;height:18px;border:1px solid rgba(255,215,0,0.25);border-radius:50%;
+    font-size:0.7rem;transition:transform 0.3s ease,border-color 0.3s ease;
+}
+.bonus-panel.bp-open .bonus-toggle-icon{transform:rotate(45deg);border-color:var(--gold)}
+.bonus-panel.bp-open{border-color:rgba(255,215,0,0.12)}
+
+/* Wonder Explorer Nav */
+.wp-nav{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:20px}
+.wp-nav-btn{
+    width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,215,0,0.2);
+    background:rgba(10,14,26,0.7);color:var(--gold-secondary);font-size:1rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:0.3s var(--ease);flex-shrink:0;
+}
+.wp-nav-btn:hover{background:rgba(255,215,0,0.1);border-color:rgba(255,215,0,0.35);color:var(--gold)}
+.wp-nav-tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.wp-tab{
+    padding:6px 14px;border-radius:100px;border:1px solid rgba(255,215,0,0.12);
+    background:rgba(255,215,0,0.03);color:var(--text-dim);font-size:0.72rem;
+    font-weight:600;cursor:pointer;transition:0.3s var(--ease);
+    font-family:'DM Sans',sans-serif;letter-spacing:0.02em;
+}
+.wp-tab:hover{border-color:rgba(255,215,0,0.25);color:var(--cream)}
+.wp-tab.active{background:rgba(255,215,0,0.1);border-color:rgba(255,215,0,0.4);color:var(--gold)}
+.wonder-preview-inner{transition:opacity 0.35s ease}
+.wonder-preview-inner.wp-fading{opacity:0}
+
+/* Gold Particle Burst */
+.particle-burst-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2000;overflow:hidden}
+.gold-particle{
+    position:absolute;width:4px;height:4px;border-radius:50%;
+    background:var(--gold);pointer-events:none;
+    animation:particleBurst 0.6s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+}
+@keyframes particleBurst{
+    0%{opacity:1;transform:translate(0,0) scale(1)}
+    100%{opacity:0;transform:translate(var(--px),var(--py)) scale(0)}
+}
+
+@media(max-width:600px){
+    .wp-nav-tabs{gap:4px}
+    .wp-tab{padding:5px 10px;font-size:0.65rem}
+    .wp-nav-btn{width:30px;height:30px;font-size:0.85rem}
+}
+
 /* === REDUCED MOTION === */
 @media(prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:0.01ms !important;transition-duration:0.01ms !important}
     .reveal,.reveal-left,.reveal-right{opacity:1 !important;transform:none !important}
+    .tilt-card,.parallax-img,.btn-magnetic{transform:none !important;will-change:auto !important}
+    .scroll-progress{display:none !important}
 }
     </style>
 </head>
 <body>
 
+<div class="scroll-progress" id="scrollProgress"><div class="scroll-progress-fill" id="scrollProgressFill"></div><div class="scroll-progress-markers" id="scrollMarkers"></div></div>
 <canvas id="starfield"></canvas>
 <div class="cursor-glow"></div>
 
@@ -688,7 +799,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
         <span class="nav-title">42 Wonders</span>
         <span class="nav-price"><strong>&pound;29.99</strong> &mdash; Collector's Edition</span>
     </div>
-    <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="nav-cta" target="_blank" rel="noopener">Buy Now</a>
+    <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="nav-cta btn-magnetic" target="_blank" rel="noopener">Buy Now</a>
 </nav>
 
 <!-- ========== HERO ========== -->
@@ -701,11 +812,11 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
     <div class="hero-stage">
         <div class="hero-plaques">
             <div class="hero-plaque">
-                <div class="hero-plaque-num">42</div>
+                <div class="hero-plaque-num" data-count="42">0</div>
                 <div class="hero-plaque-label">Wonders</div>
             </div>
             <div class="hero-plaque">
-                <div class="hero-plaque-num">+10</div>
+                <div class="hero-plaque-num" data-count="10" data-prefix="+">0</div>
                 <div class="hero-plaque-label">Bonus</div>
             </div>
         </div>
@@ -716,7 +827,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
         </div>
         <div class="hero-plaques">
             <div class="hero-plaque">
-                <div class="hero-plaque-num">4</div>
+                <div class="hero-plaque-num" data-count="4">0</div>
                 <div class="hero-plaque-label">Ratings</div>
             </div>
             <div class="hero-plaque">
@@ -734,7 +845,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
             <span class="hero-format-tag">Collector's Edition</span>
         </div>
         <div class="hero-ctas">
-            <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="btn btn-gold btn-cart" target="_blank" rel="noopener">Add to Cart</a>
+            <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="btn btn-gold btn-cart btn-magnetic" target="_blank" rel="noopener">Add to Cart</a>
             <a href="#inside" class="btn btn-outline">Look Inside</a>
         </div>
         <div class="hero-trust">
@@ -760,22 +871,22 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
             <p>This isn't a textbook or a photo collection. It's a structured journey through the night sky's greatest objects &mdash; with a scoring system that makes each one unforgettable.</p>
         </div>
         <div class="features-grid stagger">
-            <div class="feature-panel reveal">
+            <div class="feature-panel reveal tilt-card">
                 <span class="feature-badge">42 Handpicked Wonders</span>
                 <h3>A Curated Collection</h3>
                 <p>Every object scored across four dimensions: Beauty, Power, Mystery, and Wonder. Compare, debate, and discover your favourites.</p>
             </div>
-            <div class="feature-panel reveal">
+            <div class="feature-panel reveal tilt-card">
                 <span class="feature-badge">10 Bonus Wonders</span>
                 <h3>Hidden Extras</h3>
                 <p>Beyond the 42 core wonders, unlock 10 additional deep-sky surprises. 52 reasons to look up, all in one book.</p>
             </div>
-            <div class="feature-panel reveal">
+            <div class="feature-panel reveal tilt-card">
                 <span class="feature-badge">Unique Rating System</span>
                 <h3>Four Dimensions of Awe</h3>
                 <p>Each wonder rated for Beauty, Power, Mystery, and Wonder. A personality profile for every cosmic object.</p>
             </div>
-            <div class="feature-panel reveal">
+            <div class="feature-panel reveal tilt-card">
                 <span class="feature-badge">Puzzles &amp; More</span>
                 <h3>Interactive Discovery</h3>
                 <p>Puzzles, challenges, games, and stargazing tips woven throughout. A book you interact with, not just read.</p>
@@ -845,16 +956,26 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
             <div class="carousel-progress"><div class="carousel-progress-fill" id="carouselProgress"></div></div>
         </div>
 
-        <!-- WONDER PROFILE PREVIEW -->
-        <div class="wonder-preview reveal">
-            <p class="wp-context">Here's how every wonder looks inside the book &mdash; <strong>Andromeda Galaxy</strong>, ranked 2nd overall</p>
+        <!-- WONDER PROFILE PREVIEW — INTERACTIVE EXPLORER -->
+        <div class="wonder-preview reveal" id="wonderExplorer">
+            <div class="wp-nav">
+                <button class="wp-nav-btn wp-nav-prev" aria-label="Previous wonder">&#10094;</button>
+                <div class="wp-nav-tabs" id="wpTabs">
+                    <button class="wp-tab active" data-idx="0">Andromeda</button>
+                    <button class="wp-tab" data-idx="1">Orion Nebula</button>
+                    <button class="wp-tab" data-idx="2">Ring Nebula</button>
+                    <button class="wp-tab" data-idx="3">Pleiades</button>
+                </div>
+                <button class="wp-nav-btn wp-nav-next" aria-label="Next wonder">&#10095;</button>
+            </div>
+            <p class="wp-context" id="wpContext">Here's how every wonder looks inside the book &mdash; <strong>Andromeda Galaxy</strong>, ranked 2nd overall</p>
             <div class="wonder-preview-inner">
                 <img class="wp-hero-img" src="assets/spread-dark.png" alt="Book spread showing wonder profile" loading="lazy">
                 <div class="wp-body">
                 <div class="wp-header">
                     <div class="wp-name-area">
-                        <h3>Andromeda Galaxy</h3>
-                        <div class="wp-pills">
+                        <h3 id="wpName">Andromeda Galaxy</h3>
+                        <div class="wp-pills" id="wpPills">
                             <span class="pill">Ranked: 2nd</span>
                             <span class="pill">Spiral Galaxy</span>
                             <span class="pill">M31</span>
@@ -881,18 +1002,18 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
                 </div>
                 <div class="wp-vis">
                     <span class="wp-vis-label">Visibility</span>
-                    <div class="vis-stars">
+                    <div class="vis-stars" id="wpVis">
                         <span class="filled">&#9733;</span><span class="filled">&#9733;</span><span class="filled">&#9733;</span><span class="filled">&#9733;</span><span class="empty">&#9733;</span>
                     </div>
                 </div>
                 <div class="wp-panels">
                     <div class="wp-panel">
                         <span class="wp-panel-title">Why It's In The List</span>
-                        <p>Our nearest major galactic neighbour and the most distant object visible to the unaided eye. A gateway to understanding the scale of the universe.</p>
+                        <p id="wpPanelWhy">Our nearest major galactic neighbour and the most distant object visible to the unaided eye. A gateway to understanding the scale of the universe.</p>
                     </div>
                     <div class="wp-panel">
                         <span class="wp-panel-title">Fun Fact</span>
-                        <p>Contains roughly one trillion stars and is heading towards us at 110 km/s. In about 4.5 billion years, it will merge with the Milky Way.</p>
+                        <p id="wpPanelFact">Contains roughly one trillion stars and is heading towards us at 110 km/s. In about 4.5 billion years, it will merge with the Milky Way.</p>
                     </div>
                 </div>
                 <div class="wp-see">
@@ -900,19 +1021,19 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
                     <div class="wp-see-grid">
                         <div class="wp-see-col">
                             <div class="wp-see-col-label">Naked Eye</div>
-                            <p>A faint fuzzy smudge &mdash; the most distant object visible without any optical aid.</p>
+                            <p id="wpSeeNaked">A faint fuzzy smudge &mdash; the most distant object visible without any optical aid.</p>
                         </div>
                         <div class="wp-see-col">
                             <div class="wp-see-col-label">Telescope</div>
-                            <p>Bright elongated core with hints of spiral structure and companion galaxies.</p>
+                            <p id="wpSeeTelescope">Bright elongated core with hints of spiral structure and companion galaxies.</p>
                         </div>
                         <div class="wp-see-col">
                             <div class="wp-see-col-label">Deep Imaging</div>
-                            <p>Full spiral arms, dark dust lanes, and satellite galaxies M32 and M110.</p>
+                            <p id="wpSeeDeep">Full spiral arms, dark dust lanes, and satellite galaxies M32 and M110.</p>
                         </div>
                     </div>
                 </div>
-                <div class="wp-data">
+                <div class="wp-data" id="wpData">
                     <div class="wp-data-item"><span class="wp-data-key">Distance</span><span class="wp-data-val">2.537 Mly</span></div>
                     <div class="wp-data-item"><span class="wp-data-key">Constellation</span><span class="wp-data-val">Andromeda</span></div>
                     <div class="wp-data-item"><span class="wp-data-key">Magnitude</span><span class="wp-data-val">3.44</span></div>
@@ -954,22 +1075,22 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
             <p>Every object scored across four categories. It's what makes this book different from anything else on the shelf.</p>
         </div>
         <div class="ratings-cats stagger" id="ratingsCats">
-            <div class="rating-cat reveal" data-r="beauty">
+            <div class="rating-cat reveal tilt-card" data-r="beauty">
                 <div class="rc rc-lg rc-beauty"><span class="rc-num" data-target="88">0</span></div>
                 <h3>Beauty</h3>
                 <p>Visual impact, from delicate clusters to jaw-dropping nebulae.</p>
             </div>
-            <div class="rating-cat reveal" data-r="power">
+            <div class="rating-cat reveal tilt-card" data-r="power">
                 <div class="rc rc-lg rc-power"><span class="rc-num" data-target="75">0</span></div>
                 <h3>Power</h3>
                 <p>Raw force &mdash; supernovae, black holes, and cosmic engines.</p>
             </div>
-            <div class="rating-cat reveal" data-r="mystery">
+            <div class="rating-cat reveal tilt-card" data-r="mystery">
                 <div class="rc rc-lg rc-mystery"><span class="rc-num" data-target="92">0</span></div>
                 <h3>Mystery</h3>
                 <p>How much remains unknown, unexplained, or deeply strange.</p>
             </div>
-            <div class="rating-cat reveal" data-r="wonder">
+            <div class="rating-cat reveal tilt-card" data-r="wonder">
                 <div class="rc rc-lg rc-wonder"><span class="rc-num" data-target="95">0</span></div>
                 <h3>Wonder</h3>
                 <p>Pure awe. The moment you grasp what you're really looking at.</p>
@@ -993,23 +1114,26 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
             <p>The book bridges the gap between what you can see tonight and what lies beyond. Every wonder shown across three levels of observation.</p>
         </div>
         <div class="discover-cols stagger">
-            <div class="discover-col reveal">
+            <div class="discover-col reveal tilt-card dc-active" data-discover="0">
                 <span class="discover-col-badge">Naked Eye</span>
                 <span class="discover-col-icon">&#128065;</span>
                 <h3>Step Outside</h3>
                 <p>Many of these wonders are visible from your garden without any equipment. The book tells you exactly where to look and what to expect.</p>
+                <p class="discover-col-extra">From the Orion Nebula glowing in the winter sky to the Andromeda Galaxy stretching across three degrees, naked-eye wonders are your gateway into deep-sky astronomy. The book includes seasonal viewing guides, finding charts, and tips for dark-adapted vision.</p>
             </div>
-            <div class="discover-col reveal">
+            <div class="discover-col reveal tilt-card" data-discover="1">
                 <span class="discover-col-badge">Telescope</span>
                 <span class="discover-col-icon">&#128301;</span>
                 <h3>Look Closer</h3>
                 <p>With a beginner telescope, these objects transform. The book describes what you'll see through the eyepiece, so you know what to look for.</p>
+                <p class="discover-col-extra">A modest 6-inch scope reveals star clusters bursting with colour, nebulae with visible structure, and galaxies as faint smudges of ancient light. Each wonder profile tells you the ideal magnification and what details to hunt for at the eyepiece.</p>
             </div>
-            <div class="discover-col reveal">
+            <div class="discover-col reveal tilt-card" data-discover="2">
                 <span class="discover-col-badge">Deep Imaging</span>
                 <span class="discover-col-icon">&#128247;</span>
                 <h3>The Full Picture</h3>
                 <p>Astrophotography reveals colours, structures, and details invisible to the eye. The book shows you the true face of each wonder.</p>
+                <p class="discover-col-extra">Long-exposure imaging uncovers hydrogen-alpha reds, oxygen-III teals, and dust lanes stretching across light-years. The book bridges observing and imaging, showing you what you can capture with modern camera setups and what lies beyond.</p>
             </div>
         </div>
         <div class="reveal">
@@ -1030,23 +1154,29 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
             <p>The book doesn't stop at 42. Hidden throughout are extra wonders, interactive challenges, and practical stargazing advice.</p>
         </div>
         <div class="bonus-grid stagger">
-            <div class="bonus-panel reveal">
+            <div class="bonus-panel reveal tilt-card">
                 <span class="bonus-badge">10 Bonus Wonders</span>
                 <span class="bonus-icon">&#10022;</span>
                 <h3>Extra Objects</h3>
                 <p>Ten additional deep-sky surprises beyond the main collection. Each one rated and profiled, bringing your total to 52.</p>
+                <div class="bonus-expand"><div class="bonus-expand-inner"><p>These hidden extras include some of the most visually striking objects in the sky &mdash; selected to reward curious readers who explore every page. Each bonus wonder receives the same full rating treatment as the main 42.</p></div></div>
+                <button class="bonus-toggle" aria-expanded="false">Discover more <span class="bonus-toggle-icon">+</span></button>
             </div>
-            <div class="bonus-panel reveal">
+            <div class="bonus-panel reveal tilt-card">
                 <span class="bonus-badge">Puzzles &amp; Challenges</span>
                 <span class="bonus-icon">&#9670;</span>
                 <h3>Interactive Pages</h3>
                 <p>Test your knowledge, solve cosmic puzzles, and take on stargazing challenges woven throughout the book.</p>
+                <div class="bonus-expand"><div class="bonus-expand-inner"><p>From constellation matching games to rating prediction challenges, these interactive elements turn passive reading into active discovery. Perfect for families, classrooms, or solo exploration on a clear night.</p></div></div>
+                <button class="bonus-toggle" aria-expanded="false">Discover more <span class="bonus-toggle-icon">+</span></button>
             </div>
-            <div class="bonus-panel reveal">
+            <div class="bonus-panel reveal tilt-card">
                 <span class="bonus-badge">Stargazing Guide</span>
                 <span class="bonus-icon">&#127776;</span>
                 <h3>Practical Tips</h3>
                 <p>Equipment advice, observation techniques, and seasonal guides to help you find these wonders in the real night sky.</p>
+                <div class="bonus-expand"><div class="bonus-expand-inner"><p>Covers telescope selection, eyepiece choices, dark sky tips, and a month-by-month observation calendar. Whether you&rsquo;re starting from scratch or upgrading your setup, the guide meets you where you are.</p></div></div>
+                <button class="bonus-toggle" aria-expanded="false">Discover more <span class="bonus-toggle-icon">+</span></button>
             </div>
         </div>
     </div>
@@ -1112,7 +1242,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
             <h2>For Anyone Who's Ever Looked Up</h2>
         </div>
         <div class="whosfor-visual reveal" style="text-align:center;margin-bottom:48px">
-            <img src="assets/book-cover-hero.png" alt="42 Wonders book cover" loading="lazy" style="max-width:200px;margin:0 auto;border-radius:var(--radius-lg);box-shadow:0 20px 60px rgba(0,0,0,0.4);opacity:0.85">
+            <img class="parallax-img" src="assets/book-cover-hero.png" alt="42 Wonders book cover" loading="lazy" style="max-width:200px;margin:0 auto;border-radius:var(--radius-lg);box-shadow:0 20px 60px rgba(0,0,0,0.4);opacity:0.85">
         </div>
         <div class="whosfor-grid stagger">
             <div class="whosfor-card reveal">
@@ -1153,7 +1283,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
 <section class="section section-author" id="author">
     <div class="container">
         <div class="author-layout">
-                <div class="author-img reveal-left">
+                <div class="author-img reveal-left parallax-img">
                     <img src="assets/reading-desk.png" alt="Damon Scotting at work" loading="lazy">
                 </div>
                 <div class="author-text reveal-right">
@@ -1233,7 +1363,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
             </div>
             <div class="final-price">&pound;29.99</div>
             <p class="final-format">Collector's Edition &bull; Paperback</p>
-            <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="btn btn-gold btn-large btn-cart" target="_blank" rel="noopener">Add to Cart</a>
+            <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="btn btn-gold btn-large btn-cart btn-magnetic" target="_blank" rel="noopener">Add to Cart</a>
             <div class="final-reassurance">
                 <span>&#10003; Secure Checkout</span>
                 <span>&#10003; 48hr Dispatch</span>
@@ -1278,7 +1408,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
         <span class="sticky-bar-title">42 Wonders</span>
         <span class="sticky-bar-price">&pound;29.99</span>
     </div>
-    <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="btn btn-gold" target="_blank" rel="noopener">Buy Now</a>
+    <a href="https://buy.stripe.com/YOUR_LINK_HERE" class="btn btn-gold btn-magnetic" target="_blank" rel="noopener">Buy Now</a>
 </div>
 
 <script>
@@ -1676,6 +1806,316 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1.05rem,1.6vw,1.3rem);fo
             if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         });
     });
+
+    /* ============================
+       HERO PLAQUE COUNT-UP
+       ============================ */
+    var heroPlaqueCounts = document.querySelectorAll('.hero-plaque-num[data-count]');
+    if (heroPlaqueCounts.length && !prefersReducedMotion) {
+        setTimeout(function() {
+            heroPlaqueCounts.forEach(function(el) {
+                var target = parseInt(el.dataset.count);
+                var prefix = el.dataset.prefix || '';
+                var startTime = null;
+                var duration = 800;
+                function step(ts) {
+                    if (!startTime) startTime = ts;
+                    var p = Math.min((ts - startTime) / duration, 1);
+                    var ep = 1 - (1 - p) * (1 - p);
+                    el.textContent = prefix + Math.round(ep * target);
+                    if (p < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+            });
+        }, 1600);
+    }
+
+    /* ============================
+       SCROLL PROGRESS JOURNEY
+       ============================ */
+    var scrollProgressBar = document.getElementById('scrollProgress');
+    var scrollProgressFill = document.getElementById('scrollProgressFill');
+    var scrollMarkersWrap = document.getElementById('scrollMarkers');
+    if (scrollProgressBar) {
+        var progressSectionIds = ['features','inside','ratings','discover','bonus','proof','whosfor','author','details','final'];
+        var markerPositions = [];
+        function calcMarkers() {
+            markerPositions = [];
+            var docH = document.documentElement.scrollHeight - window.innerHeight;
+            scrollMarkersWrap.innerHTML = '';
+            progressSectionIds.forEach(function(id) {
+                var el = document.getElementById(id);
+                if (!el || docH <= 0) return;
+                var pct = (el.offsetTop / docH) * 100;
+                markerPositions.push(pct);
+                var m = document.createElement('div');
+                m.className = 'scroll-progress-marker';
+                m.style.left = pct + '%';
+                scrollMarkersWrap.appendChild(m);
+            });
+        }
+        function updateScrollProgress() {
+            var scrollY = window.scrollY;
+            var docH = document.documentElement.scrollHeight - window.innerHeight;
+            var pct = docH > 0 ? (scrollY / docH) * 100 : 0;
+            scrollProgressBar.classList.toggle('visible', scrollY > window.innerHeight * 0.3);
+            scrollProgressFill.style.width = pct + '%';
+            var markers = scrollMarkersWrap.children;
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].classList.toggle('passed', markerPositions[i] <= pct + 1);
+            }
+        }
+        calcMarkers();
+        window.addEventListener('scroll', updateScrollProgress, { passive: true });
+        window.addEventListener('resize', function() { calcMarkers(); updateScrollProgress(); });
+    }
+
+    /* ============================
+       TILT CARDS (3D)
+       ============================ */
+    if (!isMobile && !prefersReducedMotion) {
+        document.querySelectorAll('.tilt-card').forEach(function(card) {
+            card.addEventListener('mousemove', function(e) {
+                var r = card.getBoundingClientRect();
+                var x = (e.clientX - r.left) / r.width - 0.5;
+                var y = (e.clientY - r.top) / r.height - 0.5;
+                card.style.transform = 'perspective(800px) rotateY(' + (x * 10) + 'deg) rotateX(' + (-y * 10) + 'deg)';
+            });
+            card.addEventListener('mouseleave', function() {
+                card.style.transform = '';
+            });
+        });
+    }
+
+    /* ============================
+       PARALLAX IMAGE LAYERS
+       ============================ */
+    if (!isMobile && !prefersReducedMotion) {
+        var parallaxImgs = document.querySelectorAll('.parallax-img');
+        if (parallaxImgs.length) {
+            var PARALLAX_STRENGTH = 10;
+            document.addEventListener('mousemove', function(e) {
+                var mx = (e.clientX / window.innerWidth - 0.5) * 2;
+                var my = (e.clientY / window.innerHeight - 0.5) * 2;
+                parallaxImgs.forEach(function(img) {
+                    var r = img.getBoundingClientRect();
+                    if (r.bottom > 0 && r.top < window.innerHeight) {
+                        img.style.transform = 'translate(' + (mx * PARALLAX_STRENGTH) + 'px, ' + (my * PARALLAX_STRENGTH) + 'px)';
+                    }
+                });
+            });
+        }
+    }
+
+    /* ============================
+       MAGNETIC CTA BUTTONS
+       ============================ */
+    if (!isMobile && !prefersReducedMotion) {
+        var magneticBtns = document.querySelectorAll('.btn-magnetic');
+        if (magneticBtns.length) {
+            var MAGNETIC_RANGE = 100;
+            var MAGNETIC_STRENGTH = 8;
+            var magRAF = null;
+            document.addEventListener('mousemove', function(e) {
+                if (magRAF) return;
+                magRAF = requestAnimationFrame(function() {
+                    magneticBtns.forEach(function(btn) {
+                        var r = btn.getBoundingClientRect();
+                        var cx = r.left + r.width / 2;
+                        var cy = r.top + r.height / 2;
+                        var dx = e.clientX - cx;
+                        var dy = e.clientY - cy;
+                        var dist = Math.sqrt(dx * dx + dy * dy);
+                        var maxDist = Math.max(r.width, r.height) / 2 + MAGNETIC_RANGE;
+                        if (dist < maxDist && dist > 0) {
+                            var pull = (1 - dist / maxDist) * MAGNETIC_STRENGTH;
+                            btn.style.transform = 'translate(' + ((dx / dist) * pull) + 'px, ' + ((dy / dist) * pull) + 'px)';
+                        } else if (btn.style.transform) {
+                            btn.style.transform = '';
+                        }
+                    });
+                    magRAF = null;
+                });
+            });
+        }
+    }
+
+    /* ============================
+       INTERACTIVE DISCOVER COLUMNS
+       ============================ */
+    var discoverCols = document.querySelectorAll('.discover-col[data-discover]');
+    if (discoverCols.length) {
+        discoverCols.forEach(function(col) {
+            col.addEventListener('click', function() {
+                discoverCols.forEach(function(c) { c.classList.remove('dc-active'); });
+                col.classList.add('dc-active');
+            });
+        });
+    }
+
+    /* ============================
+       BONUS PANEL EXPAND
+       ============================ */
+    document.querySelectorAll('.bonus-toggle').forEach(function(toggle) {
+        toggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var panel = toggle.closest('.bonus-panel');
+            var expand = panel.querySelector('.bonus-expand');
+            var inner = expand.querySelector('.bonus-expand-inner');
+            var isOpen = panel.classList.contains('bp-open');
+            document.querySelectorAll('.bonus-panel.bp-open').forEach(function(op) {
+                if (op !== panel) {
+                    op.classList.remove('bp-open');
+                    op.querySelector('.bonus-expand').style.maxHeight = '0';
+                    op.querySelector('.bonus-toggle').setAttribute('aria-expanded', 'false');
+                }
+            });
+            if (isOpen) {
+                panel.classList.remove('bp-open');
+                expand.style.maxHeight = '0';
+                toggle.setAttribute('aria-expanded', 'false');
+            } else {
+                panel.classList.add('bp-open');
+                expand.style.maxHeight = inner.scrollHeight + 18 + 'px';
+                toggle.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+
+    /* ============================
+       WONDER EXPLORER — DATA
+       ============================ */
+    var WONDERS = [
+        {
+            name:'Andromeda Galaxy', rank:'2nd', type:'Spiral Galaxy', catalogue:'M31',
+            beauty:88, power:72, mystery:94, wonder:91, visStars:4,
+            why:'Our nearest major galactic neighbour and the most distant object visible to the unaided eye. A gateway to understanding the scale of the universe.',
+            fact:'Contains roughly one trillion stars and is heading towards us at 110 km/s. In about 4.5 billion years, it will merge with the Milky Way.',
+            seeNaked:'A faint fuzzy smudge \u2014 the most distant object visible without any optical aid.',
+            seeTelescope:'Bright elongated core with hints of spiral structure and companion galaxies.',
+            seeDeep:'Full spiral arms, dark dust lanes, and satellite galaxies M32 and M110.',
+            data:[['Distance','2.537 Mly'],['Constellation','Andromeda'],['Magnitude','3.44'],['Apparent Size','3\u00b0 \u00d7 1\u00b0'],['Catalogue','M31 / NGC 224'],['Best Viewed','Autumn']]
+        },
+        {
+            name:'Orion Nebula', rank:'1st', type:'Emission Nebula', catalogue:'M42',
+            beauty:95, power:82, mystery:78, wonder:96, visStars:5,
+            why:'The brightest nebula in the sky and a stellar nursery where new stars are being born right now. Visible to the naked eye as the middle "star" in Orion\'s sword.',
+            fact:'Contains the Trapezium Cluster \u2014 four massive young stars whose radiation illuminates the entire nebula. It spans roughly 24 light-years across.',
+            seeNaked:'A hazy smudge in Orion\'s sword, easily spotted on a clear winter night.',
+            seeTelescope:'Swirling greenish gas with the four Trapezium stars resolved at the core.',
+            seeDeep:'Vivid reds, blues, and delicate filaments stretching far beyond the visible core.',
+            data:[['Distance','1,344 ly'],['Constellation','Orion'],['Magnitude','4.0'],['Apparent Size','65\u2032 \u00d7 60\u2032'],['Catalogue','M42 / NGC 1976'],['Best Viewed','Winter']]
+        },
+        {
+            name:'Ring Nebula', rank:'14th', type:'Planetary Nebula', catalogue:'M57',
+            beauty:84, power:58, mystery:86, wonder:80, visStars:2,
+            why:'A ghostly cosmic smoke ring \u2014 the dying breath of a sun-like star. One of the most photogenic planetary nebulae and a preview of our own Sun\'s distant fate.',
+            fact:'The central white dwarf is over 100,000\u00b0C \u2014 one of the hottest stars known. The ring is expanding at 20\u201330 km/s.',
+            seeNaked:'Invisible to the naked eye. You need at least binoculars to find the right spot in Lyra.',
+            seeTelescope:'A tiny grey doughnut floating between the stars. Higher magnification reveals the hollow centre.',
+            seeDeep:'Vivid blues, greens, and the faint outer halo of expelled gas layers are revealed.',
+            data:[['Distance','2,283 ly'],['Constellation','Lyra'],['Magnitude','8.8'],['Apparent Size','1.4\u2032 \u00d7 1.0\u2032'],['Catalogue','M57 / NGC 6720'],['Best Viewed','Summer']]
+        },
+        {
+            name:'Pleiades', rank:'5th', type:'Open Cluster', catalogue:'M45',
+            beauty:90, power:55, mystery:68, wonder:88, visStars:5,
+            why:'The most famous star cluster in the sky and a landmark of every civilisation\'s sky lore. The Seven Sisters have been watched for thousands of years.',
+            fact:'The cluster contains over 1,000 stars but is dominated by the hot blue giants visible to the naked eye. Reflection nebulosity surrounds the brightest members.',
+            seeNaked:'A shimmering mini-dipper of six or seven stars. One of the first tests of your eyesight.',
+            seeTelescope:'Dozens of blue-white stars scattered across a rich field. A breathtaking low-power view.',
+            seeDeep:'Wispy blue reflection nebulae curl around the brightest stars like cosmic cobwebs.',
+            data:[['Distance','444 ly'],['Constellation','Taurus'],['Magnitude','1.6'],['Apparent Size','110\u2032'],['Catalogue','M45'],['Best Viewed','Winter']]
+        }
+    ];
+
+    /* ============================
+       WONDER EXPLORER — LOGIC
+       ============================ */
+    var wonderExplorer = document.getElementById('wonderExplorer');
+    if (wonderExplorer && WONDERS.length) {
+        var currentWonder = 0;
+        var wpInner = wonderExplorer.querySelector('.wonder-preview-inner');
+        var wpContext = document.getElementById('wpContext');
+        var wpName = document.getElementById('wpName');
+        var wpPills = document.getElementById('wpPills');
+        var wpVis = document.getElementById('wpVis');
+        var wpPanelWhy = document.getElementById('wpPanelWhy');
+        var wpPanelFact = document.getElementById('wpPanelFact');
+        var wpSeeNaked = document.getElementById('wpSeeNaked');
+        var wpSeeTelescope = document.getElementById('wpSeeTelescope');
+        var wpSeeDeep = document.getElementById('wpSeeDeep');
+        var wpDataEl = document.getElementById('wpData');
+        var wpTabs = document.querySelectorAll('.wp-tab');
+
+        function switchWonder(idx) {
+            if (idx === currentWonder) return;
+            currentWonder = idx;
+            var w = WONDERS[idx];
+            wpInner.classList.add('wp-fading');
+            setTimeout(function() {
+                wpContext.innerHTML = 'Here\'s how every wonder looks inside the book \u2014 <strong>' + w.name + '</strong>, ranked ' + w.rank + ' overall';
+                wpName.textContent = w.name;
+                wpPills.innerHTML = '<span class="pill">Ranked: ' + w.rank + '</span><span class="pill">' + w.type + '</span><span class="pill">' + w.catalogue + '</span>';
+                var ratingEls = document.querySelectorAll('#wpRatings .rc-num');
+                var targets = [w.beauty, w.power, w.mystery, w.wonder];
+                ratingEls.forEach(function(el, i) { el.textContent = '0'; el.dataset.target = targets[i]; el.classList.remove('counted'); });
+                var starsHTML = '';
+                for (var i = 0; i < 5; i++) { starsHTML += '<span class="' + (i < w.visStars ? 'filled' : 'empty') + '">&#9733;</span>'; }
+                wpVis.innerHTML = starsHTML;
+                wpPanelWhy.textContent = w.why;
+                wpPanelFact.textContent = w.fact;
+                wpSeeNaked.textContent = w.seeNaked;
+                wpSeeTelescope.textContent = w.seeTelescope;
+                wpSeeDeep.textContent = w.seeDeep;
+                var dataHTML = '';
+                w.data.forEach(function(d) { dataHTML += '<div class="wp-data-item"><span class="wp-data-key">' + d[0] + '</span><span class="wp-data-val">' + d[1] + '</span></div>'; });
+                wpDataEl.innerHTML = dataHTML;
+                wpTabs.forEach(function(tab, i) { tab.classList.toggle('active', i === idx); });
+                wpInner.classList.remove('wp-fading');
+                ratingEls.forEach(function(el) { animateCountUp(el, parseInt(el.dataset.target), 1200); });
+            }, 350);
+        }
+
+        wpTabs.forEach(function(tab) {
+            tab.addEventListener('click', function() { switchWonder(parseInt(tab.dataset.idx)); });
+        });
+        wonderExplorer.querySelector('.wp-nav-prev').addEventListener('click', function() {
+            switchWonder((currentWonder - 1 + WONDERS.length) % WONDERS.length);
+        });
+        wonderExplorer.querySelector('.wp-nav-next').addEventListener('click', function() {
+            switchWonder((currentWonder + 1) % WONDERS.length);
+        });
+    }
+
+    /* ============================
+       GOLD PARTICLE BURST
+       ============================ */
+    function createParticleBurst(x, y) {
+        var container = document.createElement('div');
+        container.className = 'particle-burst-container';
+        document.body.appendChild(container);
+        var count = 18;
+        for (var i = 0; i < count; i++) {
+            var p = document.createElement('div');
+            p.className = 'gold-particle';
+            var angle = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.5;
+            var dist = 40 + Math.random() * 60;
+            p.style.left = x + 'px';
+            p.style.top = y + 'px';
+            p.style.setProperty('--px', Math.cos(angle) * dist + 'px');
+            p.style.setProperty('--py', Math.sin(angle) * dist + 'px');
+            var size = 2 + Math.random() * 4;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.animationDuration = (0.4 + Math.random() * 0.3) + 's';
+            container.appendChild(p);
+        }
+        setTimeout(function() { if (container.parentNode) container.parentNode.removeChild(container); }, 800);
+    }
+    document.querySelectorAll('.btn-gold, .nav-cta').forEach(function(btn) {
+        btn.addEventListener('click', function(e) { createParticleBurst(e.clientX, e.clientY); });
+    });
+
 })();
 </script>
 </body>
