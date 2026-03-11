@@ -316,10 +316,10 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.5vw,1.25rem);font
 /* ============================================
    SECTION 3: INSIDE THE BOOK
    ============================================ */
-.section-inside{background:var(--bg-deep);position:relative;overflow:hidden}
+.section-inside{background:var(--bg-deep);position:relative;overflow:hidden;padding:140px 0}
 .section-inside::before{
-    content:'';position:absolute;top:50%;left:50%;width:800px;height:800px;
-    background:radial-gradient(circle,rgba(232,67,147,0.04) 0%,transparent 60%);
+    content:'';position:absolute;top:50%;left:50%;width:1000px;height:800px;
+    background:radial-gradient(ellipse,rgba(232,67,147,0.05) 0%,rgba(255,215,0,0.02) 40%,transparent 70%);
     transform:translate(-50%,-50%);pointer-events:none;
 }
 .inside-tabs{
@@ -336,7 +336,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.5vw,1.25rem);font
 .inside-tab:hover{color:var(--cream)}
 .inside-tab.active{background:rgba(255,215,0,0.1);color:var(--gold);box-shadow:0 2px 12px rgba(255,215,0,0.08)}
 .inside-display{
-    display:grid;grid-template-columns:55% 1fr;gap:40px;align-items:start;
+    display:grid;grid-template-columns:55% 1fr;gap:48px;align-items:start;
 }
 .inside-video-wrap{
     position:relative;border-radius:var(--radius-lg);overflow:hidden;
@@ -376,54 +376,89 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.5vw,1.25rem);font
     .inside-panels{grid-template-columns:1fr}
     .inside-tabs{flex-wrap:wrap}
 }
+@media(max-width:600px){
+    .inside-ratings-row .rc-lg{width:72px;height:72px}
+    .inside-ratings-row .rc-lg .rc-num{font-size:1.1rem}
+}
 
 /* ============================================
-   SECTION 4: VIDEO BREAK
+   SECTION 4: RATING SYSTEM SHOWCASE
    ============================================ */
-.video-break{position:relative;height:70vh;min-height:400px;overflow:hidden;z-index:2}
-.video-break video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.video-break-overlay{
-    position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;
-    background:
-        linear-gradient(to bottom,rgba(6,10,20,0.5) 0%,rgba(6,10,20,0.2) 40%,rgba(6,10,20,0.2) 60%,rgba(6,10,20,0.5) 100%);
+.section-ratings{position:relative;overflow:hidden}
+.section-ratings::before{
+    content:'';position:absolute;top:50%;left:50%;width:1000px;height:600px;
+    background:radial-gradient(ellipse,rgba(255,215,0,0.03) 0%,transparent 70%);
+    transform:translate(-50%,-50%);pointer-events:none;
 }
-.video-break-quote{
+.rs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative;z-index:1}
+.rs-card{
+    text-align:center;padding:40px 20px;
+    background:rgba(13,18,37,0.5);border:1px solid rgba(255,255,255,0.04);
+    border-radius:var(--radius-lg);position:relative;overflow:hidden;
+    transition:all 0.4s var(--ease);
+}
+.rs-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.rs-card-beauty::before{background:var(--beauty)}
+.rs-card-power::before{background:var(--power)}
+.rs-card-mystery::before{background:var(--mystery)}
+.rs-card-wonder::before{background:var(--wonder)}
+.rs-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.08);box-shadow:0 20px 40px rgba(0,0,0,0.3)}
+.rs-card .rc{margin:0 auto 16px}
+.rs-dimension{
+    font-family:'Cinzel',serif;font-size:0.85rem;font-weight:700;
+    text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;
+}
+.rs-card-beauty .rs-dimension{color:var(--beauty)}
+.rs-card-power .rs-dimension{color:var(--power)}
+.rs-card-mystery .rs-dimension{color:var(--mystery)}
+.rs-card-wonder .rs-dimension{color:var(--wonder)}
+.rs-desc{font-size:0.85rem;color:var(--text);line-height:1.7}
+.rs-tagline{
+    text-align:center;margin-top:48px;position:relative;z-index:1;
     font-family:'Cormorant Garamond',serif;font-style:italic;
-    font-size:clamp(1.3rem,3vw,2rem);color:var(--cream);text-align:center;
-    max-width:700px;line-height:1.6;padding:0 24px;
-    text-shadow:0 2px 20px rgba(0,0,0,0.5);
+    font-size:clamp(1.1rem,2vw,1.4rem);color:var(--text-dim);
+    max-width:600px;margin-left:auto;margin-right:auto;
 }
+@media(max-width:900px){.rs-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.rs-grid{grid-template-columns:1fr}}
 
 /* ============================================
-   SECTION 5: WHY THIS BOOK
+   SECTION 5: HIGHLIGHTS
    ============================================ */
-.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.why-card{
-    background:var(--glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-    border:1px solid var(--glass-border);border-radius:var(--radius-lg);
-    padding:36px 28px;transition:all 0.4s var(--ease);position:relative;overflow:hidden;
+.highlights{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    background:rgba(13,18,37,0.4);border:1px solid rgba(255,215,0,0.06);
+    border-radius:var(--radius-lg);overflow:hidden;
 }
-.why-card::before{
-    content:'';position:absolute;top:0;left:0;right:0;height:2px;
-    background:linear-gradient(90deg,transparent,var(--gold-secondary),transparent);
-    transform:scaleX(0);transition:transform 0.4s var(--ease);
+.highlight-item{
+    padding:48px 32px;text-align:center;
+    border-right:1px solid rgba(255,215,0,0.06);
+    transition:background 0.3s var(--ease);
 }
-.why-card:hover::before{transform:scaleX(1)}
-.why-card:hover{
-    border-color:rgba(255,215,0,0.15);transform:translateY(-6px);
-    box-shadow:0 20px 60px rgba(0,0,0,0.3),0 0 30px rgba(255,215,0,0.03);
+.highlight-item:last-child{border-right:none}
+.highlight-item:hover{background:rgba(255,215,0,0.02)}
+.highlight-accent{
+    font-family:'Cinzel',serif;font-size:clamp(2rem,4vw,3rem);
+    font-weight:700;color:var(--gold);margin-bottom:16px;display:block;
 }
-.why-icon{font-size:1.8rem;margin-bottom:16px;display:block;filter:saturate(0.7)}
-.why-card h3{margin-bottom:10px}
-.why-card p{font-size:0.9rem;color:var(--text);line-height:1.7}
-
-@media(max-width:900px){.why-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.why-grid{grid-template-columns:1fr}}
+.highlight-item h3{margin-bottom:10px}
+.highlight-item p{font-size:0.88rem;color:var(--text);line-height:1.7}
+@media(max-width:768px){
+    .highlights{grid-template-columns:1fr}
+    .highlight-item{border-right:none;border-bottom:1px solid rgba(255,215,0,0.06)}
+    .highlight-item:last-child{border-bottom:none}
+}
 
 /* ============================================
    SECTION 6: COLLECTOR'S EDITION
    ============================================ */
-.collector-layout{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.section-collector{position:relative;overflow:hidden}
+.section-collector::before{
+    content:'';position:absolute;bottom:-200px;right:-200px;width:600px;height:600px;
+    background:radial-gradient(circle,rgba(255,215,0,0.04) 0%,transparent 70%);
+    pointer-events:none;
+}
+.collector-layout{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;position:relative;z-index:1}
 .collector-video-wrap{
     border-radius:var(--radius-lg);overflow:hidden;
     box-shadow:0 24px 64px rgba(0,0,0,0.5),0 0 40px rgba(255,215,0,0.04);
@@ -677,17 +712,6 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.5vw,1.25rem);font
         </div>
         <!-- Slide 3: Image -->
         <div class="fc-slide">
-            <img class="fc-slide-bg is-img" src="assets/spread-hands.png" alt="Reader exploring the book" loading="lazy">
-            <div class="fc-slide-vignette"></div>
-            <div class="fc-slide-content">
-                <div class="fc-slide-eyebrow">Collector-Worthy</div>
-                <div class="fc-slide-title">Designed to<br>Display &amp; Treasure</div>
-                <div class="fc-slide-desc">Premium print quality, rich layouts, and tactile design. A book that's as beautiful closed as it is open. Made to keep, gift, and revisit for years.</div>
-                <div class="fc-slide-badge">&#10022; Premium Quality Print</div>
-            </div>
-        </div>
-        <!-- Slide 4: Image -->
-        <div class="fc-slide">
             <img class="fc-slide-bg is-img" src="assets/spread-instruments.png" alt="Book with instruments" loading="lazy">
             <div class="fc-slide-vignette"></div>
             <div class="fc-slide-content">
@@ -708,17 +732,6 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.5vw,1.25rem);font
                 <div class="fc-slide-badge">&#128301; Your Stargazing Companion</div>
             </div>
         </div>
-        <!-- Slide 6: Video -->
-        <div class="fc-slide">
-            <video class="fc-slide-bg" muted loop playsinline preload="none" data-src="assets/book-cozy-tea.mp4"></video>
-            <div class="fc-slide-vignette"></div>
-            <div class="fc-slide-content">
-                <div class="fc-slide-eyebrow">The Evening Ritual</div>
-                <div class="fc-slide-title">A Book You'll<br>Keep Coming Back To</div>
-                <div class="fc-slide-desc">Curl up with the cosmos. Rich enough to reward multiple reads, interactive enough to surprise every time. Not a one-read book &mdash; it's a companion.</div>
-                <div class="fc-slide-badge">&#9749; Made for Rediscovery</div>
-            </div>
-        </div>
     </div>
     <button class="fc-nav-btn fc-prev" id="fcPrev" aria-label="Previous slide">&#10094;</button>
     <button class="fc-nav-btn fc-next" id="fcNext" aria-label="Next slide">&#10095;</button>
@@ -730,9 +743,9 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.5vw,1.25rem);font
 <section class="section section-inside" id="inside">
     <div class="container">
         <div class="section-header reveal">
-            <span class="eyebrow">Experience the Pages</span>
-            <h2>Inside the Book</h2>
-            <p>Each wonder gets a richly illustrated profile with ratings, key facts, and visibility information. Switch between examples to see the book come to life.</p>
+            <span class="eyebrow">The Heart of the Book</span>
+            <h2>Experience Every Wonder</h2>
+            <p>Switch between three of the book's showpiece entries. Each one rated, illustrated, and profiled &mdash; exactly as you'll find them on the printed page.</p>
         </div>
         <div class="inside-tabs reveal" id="insideTabs">
             <button class="inside-tab active" data-idx="0">Andromeda Galaxy</button>
@@ -752,28 +765,28 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.5vw,1.25rem);font
                 </div>
                 <div class="inside-ratings-row" id="insideRatings">
                     <div class="inside-rating-item">
-                        <div class="rc rc-beauty">
+                        <div class="rc rc-lg rc-beauty">
                             <svg viewBox="0 0 120 120"><circle class="rc-track" cx="60" cy="60" r="52"/><circle class="rc-fill" cx="60" cy="60" r="52"/></svg>
                             <span class="rc-num" data-target="88">0</span>
                         </div>
                         <span class="inside-rating-label">Beauty</span>
                     </div>
                     <div class="inside-rating-item">
-                        <div class="rc rc-power">
+                        <div class="rc rc-lg rc-power">
                             <svg viewBox="0 0 120 120"><circle class="rc-track" cx="60" cy="60" r="52"/><circle class="rc-fill" cx="60" cy="60" r="52"/></svg>
                             <span class="rc-num" data-target="72">0</span>
                         </div>
                         <span class="inside-rating-label">Power</span>
                     </div>
                     <div class="inside-rating-item">
-                        <div class="rc rc-mystery">
+                        <div class="rc rc-lg rc-mystery">
                             <svg viewBox="0 0 120 120"><circle class="rc-track" cx="60" cy="60" r="52"/><circle class="rc-fill" cx="60" cy="60" r="52"/></svg>
                             <span class="rc-num" data-target="94">0</span>
                         </div>
                         <span class="inside-rating-label">Mystery</span>
                     </div>
                     <div class="inside-rating-item">
-                        <div class="rc rc-wonder">
+                        <div class="rc rc-lg rc-wonder">
                             <svg viewBox="0 0 120 120"><circle class="rc-track" cx="60" cy="60" r="52"/><circle class="rc-fill" cx="60" cy="60" r="52"/></svg>
                             <span class="rc-num" data-target="91">0</span>
                         </div>
@@ -809,68 +822,92 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.5vw,1.25rem);font
     </div>
 </section>
 
-<!-- ========== SECTION 4: VIDEO BREAK ========== -->
-<section class="video-break" id="videoBreak">
-    <video muted loop playsinline preload="none" data-src="assets/stock-3.mp4"></video>
-    <div class="video-break-overlay">
-        <p class="video-break-quote reveal">Every object in the night sky has a story.<br>This book helps you tell it.</p>
+<!-- ========== SECTION 4: RATING SYSTEM SHOWCASE ========== -->
+<section class="section section-ratings" id="ratingSystem">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="eyebrow">The Signature Feature</span>
+            <h2>Beauty. Power. Mystery. Wonder.</h2>
+            <p>Every object scored across four unique dimensions &mdash; a rating system that reveals each wonder's true personality.</p>
+        </div>
+        <div class="rs-grid stagger">
+            <div class="rs-card rs-card-beauty reveal">
+                <div class="rc rc-lg rc-beauty">
+                    <svg viewBox="0 0 120 120"><circle class="rc-track" cx="60" cy="60" r="52"/><circle class="rc-fill" cx="60" cy="60" r="52"/></svg>
+                    <span class="rc-num" data-target="88">0</span>
+                </div>
+                <div class="rs-dimension">Beauty</div>
+                <p class="rs-desc">Visual splendour through the eyepiece and the lens. How breathtaking is this object when you actually see it?</p>
+            </div>
+            <div class="rs-card rs-card-power reveal">
+                <div class="rc rc-lg rc-power">
+                    <svg viewBox="0 0 120 120"><circle class="rc-track" cx="60" cy="60" r="52"/><circle class="rc-fill" cx="60" cy="60" r="52"/></svg>
+                    <span class="rc-num" data-target="72">0</span>
+                </div>
+                <div class="rs-dimension">Power</div>
+                <p class="rs-desc">Raw physical scale, energy, and cosmic force. The sheer magnitude of what you're looking at.</p>
+            </div>
+            <div class="rs-card rs-card-mystery reveal">
+                <div class="rc rc-lg rc-mystery">
+                    <svg viewBox="0 0 120 120"><circle class="rc-track" cx="60" cy="60" r="52"/><circle class="rc-fill" cx="60" cy="60" r="52"/></svg>
+                    <span class="rc-num" data-target="94">0</span>
+                </div>
+                <div class="rs-dimension">Mystery</div>
+                <p class="rs-desc">How much remains unknown or unexplained. The questions this object still poses to science.</p>
+            </div>
+            <div class="rs-card rs-card-wonder reveal">
+                <div class="rc rc-lg rc-wonder">
+                    <svg viewBox="0 0 120 120"><circle class="rc-track" cx="60" cy="60" r="52"/><circle class="rc-fill" cx="60" cy="60" r="52"/></svg>
+                    <span class="rc-num" data-target="91">0</span>
+                </div>
+                <div class="rs-dimension">Wonder</div>
+                <p class="rs-desc">The capacity to stop you in your tracks. That feeling when the universe reminds you how small you are.</p>
+            </div>
+        </div>
+        <p class="rs-tagline reveal">Compare, debate, and discover. No other astronomy book rates objects like this.</p>
     </div>
 </section>
 
-<!-- ========== SECTION 5: WHY THIS BOOK ========== -->
-<section class="section" id="whyBook">
+<!-- ========== SECTION 5: HIGHLIGHTS ========== -->
+<section class="section" id="highlights">
     <div class="container">
         <div class="section-header reveal">
-            <span class="eyebrow">More Than a Book</span>
-            <h2>Why This Book Is Worth It</h2>
-            <p>This isn't just a list of objects. It's a structured, interactive, beautifully presented journey through the night sky's greatest wonders.</p>
+            <span class="eyebrow">Why This Book</span>
+            <h2>More Than a Stargazing Guide</h2>
         </div>
-        <div class="why-grid stagger">
-            <div class="why-card reveal tilt-card">
-                <span class="why-icon">&#127776;</span>
-                <h3>42 Handpicked Wonders</h3>
-                <p>Every object curated for its ability to inspire awe. Scored across four dimensions: Beauty, Power, Mystery, and Wonder. Compare, debate, discover.</p>
+        <div class="highlights reveal">
+            <div class="highlight-item">
+                <span class="highlight-accent">52</span>
+                <h3>Handpicked Objects</h3>
+                <p>42 core wonders plus 10 bonus discoveries hidden throughout the book. Each one curated, rated, and profiled in full.</p>
             </div>
-            <div class="why-card reveal tilt-card">
-                <span class="why-icon">&#10022;</span>
-                <h3>10 Bonus Wonders</h3>
-                <p>Hidden throughout the book, ten additional deep-sky surprises. Each one rated and profiled, bringing your total to 52 reasons to look up.</p>
-            </div>
-            <div class="why-card reveal tilt-card">
-                <span class="why-icon">&#9733;</span>
-                <h3>Unique Rating System</h3>
-                <p>No other astronomy book rates objects like this. Four dimensions reveal each wonder's personality &mdash; from visual stunner to cosmic enigma.</p>
-            </div>
-            <div class="why-card reveal tilt-card">
-                <span class="why-icon">&#9670;</span>
+            <div class="highlight-item">
+                <span class="highlight-accent">&#9670;</span>
                 <h3>Interactive Pages</h3>
-                <p>Puzzles, challenges, games, and stargazing activities woven throughout. A book you interact with, not just read. Perfect for families and solo exploration.</p>
+                <p>Puzzles, challenges, games, and stargazing activities woven into every chapter. A book you use, not just read.</p>
             </div>
-            <div class="why-card reveal tilt-card">
-                <span class="why-icon">&#128301;</span>
-                <h3>Stargazing Guide</h3>
-                <p>Equipment advice, observation techniques, and seasonal guides. Whether you're starting from scratch or upgrading your setup, the book meets you where you are.</p>
-            </div>
-            <div class="why-card reveal tilt-card">
-                <span class="why-icon">&#128218;</span>
-                <h3>Premium Print Quality</h3>
-                <p>Collector-worthy design with rich layouts, vivid imagery, and tactile presentation. A book that's as beautiful to display as it is to explore.</p>
+            <div class="highlight-item">
+                <span class="highlight-accent">&#9733;</span>
+                <h3>Practical Stargazing</h3>
+                <p>Equipment guides, seasonal tips, and visibility info for every object. Take this book to the eyepiece.</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- ========== SECTION 6: COLLECTOR'S EDITION ========== -->
-<section class="section" id="collector">
+<section class="section section-collector" id="collector">
     <div class="container">
+        <div class="section-header reveal" style="margin-bottom:48px">
+            <span class="eyebrow">The Complete Package</span>
+            <h2>Everything in the Box</h2>
+            <p>Not just a book &mdash; a curated collection of prints, extras, and premium packaging. Designed to feel like a gift, whether you're buying it for yourself or someone special.</p>
+        </div>
         <div class="collector-layout">
             <div class="collector-video-wrap reveal-left">
                 <video muted loop playsinline preload="none" data-src="assets/4k-prints.mp4"></video>
             </div>
             <div class="collector-content reveal-right">
-                <span class="eyebrow">What You'll Receive</span>
-                <h2>The Collector's Edition</h2>
-                <p style="color:var(--text);line-height:1.8;font-size:0.95rem">More than a book. A premium package designed to feel like a gift &mdash; whether you're buying it for yourself or someone special.</p>
                 <div class="collector-items">
                     <div class="collector-item">
                         <span class="collector-qty">1&times;</span>
@@ -920,11 +957,13 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.5vw,1.25rem);font
                 <img src="assets/reading-desk.png" alt="Damon Scotting" loading="lazy">
             </div>
             <div class="author-text reveal-right">
-                <p>Astronomy communicator, astrophotographer, and the voice behind a growing community of stargazers who believe the night sky belongs to everyone.</p>
-                <p>42 Wonders is the result of years spent photographing, researching, and sharing the cosmos &mdash; distilled into a book that makes deep-sky astronomy accessible, engaging, and genuinely fun.</p>
+                <p>Damon Scotting is an astrophotographer, science communicator, and educator with a growing audience of stargazers across YouTube, TikTok, and Instagram. His work bridges the gap between serious astronomy and genuine accessibility &mdash; making the cosmos feel within reach for everyone.</p>
+                <p>42 Wonders is the culmination of years spent behind the telescope, behind the camera, and in front of the community &mdash; distilled into the book he always wished existed.</p>
                 <div class="author-creds">
                     <span class="author-cred">Astrophotographer</span>
                     <span class="author-cred">Science Communicator</span>
+                    <span class="author-cred">Educator</span>
+                    <span class="author-cred">Content Creator</span>
                     <span class="author-cred">Community Builder</span>
                 </div>
             </div>
@@ -1030,7 +1069,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.5vw,1.25rem);font
         </div>
     </div>
     <div class="footer-bottom">
-        <p>&copy; 2025 Damon Scotting. All rights reserved.</p>
+        <p>&copy; 2026 Damon Scotting. All rights reserved.</p>
     </div>
 </footer>
 
@@ -1213,9 +1252,20 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.5vw,1.25rem);font
                 ratingObs.unobserve(e.target);
             }
         });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.1 });
     var insideRatings = document.getElementById('insideRatings');
     if (insideRatings) ratingObs.observe(insideRatings);
+
+    // Observe rating showcase section
+    var rsGrid = document.querySelector('.rs-grid');
+    if (rsGrid) ratingObs.observe(rsGrid);
+
+    // Fallback: force-animate any un-counted rings after 6 seconds
+    setTimeout(function() {
+        document.querySelectorAll('.rc-num:not(.counted)').forEach(function(num) {
+            animateCountUp(num, parseInt(num.dataset.target) || 0, 1200);
+        });
+    }, 6000);
 
     /* ============================
        HERO CINEMATIC SEQUENCE
