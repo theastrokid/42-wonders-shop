@@ -644,7 +644,7 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.5vw,1.25rem);font
 <!-- ========== SECTION 1: HERO ========== -->
 <section class="hero" id="hero">
     <video class="hero-video" id="heroVideo" autoplay muted playsinline preload="auto" poster="assets/book-hero-new.png">
-        <source src="assets/main-hero.mp4" type="video/mp4">
+        <source src="assets/hero-video-42.mp4" type="video/mp4">
     </video>
     <div class="hero-vignette"></div>
     <div class="hero-overlay" id="heroOverlay">
@@ -1278,27 +1278,32 @@ h3{font-family:'Playfair Display',serif;font-size:clamp(1rem,1.5vw,1.25rem);font
     function revealHeroOverlay() {
         if (heroRevealed) return;
         heroRevealed = true;
-        heroVideo.loop = true;
-        heroVideo.play().catch(function(){});
-        setTimeout(function() {
-            heroOverlay.classList.add('revealed');
-        }, 300);
+        heroOverlay.classList.add('revealed');
         setTimeout(function() {
             heroScrollCue.classList.add('visible');
-        }, 2000);
+        }, 800);
+    }
+
+    function autoScrollPastHero() {
+        var nextSection = document.getElementById('hero').nextElementSibling;
+        if (nextSection) {
+            nextSection.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 
     if (isMobile || prefersReducedMotion) {
         heroOverlay.classList.add('revealed');
         heroScrollCue.classList.add('visible');
-        heroVideo.loop = true;
         heroRevealed = true;
-        // Remove transition delays on mobile for immediate show
         var mobileReveals = heroOverlay.querySelectorAll('.hero-reveal');
         mobileReveals.forEach(function(el) { el.style.transitionDelay = '0s'; el.style.opacity = '1'; el.style.transform = 'none'; el.style.filter = 'none'; });
+        heroVideo.addEventListener('ended', autoScrollPastHero, { once: true });
+        heroVideo.play().catch(function() { revealHeroOverlay(); });
     } else {
-        heroVideo.addEventListener('ended', revealHeroOverlay, { once: true });
-        setTimeout(revealHeroOverlay, 9000); // safety fallback
+        heroVideo.addEventListener('ended', function() {
+            revealHeroOverlay();
+            setTimeout(autoScrollPastHero, 1500);
+        }, { once: true });
         heroVideo.play().catch(function() { revealHeroOverlay(); });
     }
 
